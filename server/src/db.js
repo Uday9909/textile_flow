@@ -38,6 +38,17 @@ export function getDb() {
     )
   `);
 
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      token_hash TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      used INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now')),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+  `);
+
   const count = db.prepare('SELECT COUNT(*) as count FROM users').get();
   if (count.count === 0) {
     seedUsers();
@@ -105,4 +116,33 @@ export function getRefreshToken(tokenHash) {
 export function deleteRefreshToken(tokenHash) {
   const dbConn = getDb();
   dbConn.prepare('DELETE FROM refresh_tokens WHERE token_hash = ?').run(tokenHash);
+}
+
+// ============================================================
+// Password Reset Token helpers
+// ============================================================
+
+export function storeResetToken(tokenHash, userId, expiresAt) {
+  const dbConn = getDb();
+  dbConn.prepare('INSERT INTO password_reset_tokens (token_hash, user_id, expires_at) VALUES (?, ?, ?)').run(tokenHash, userId, expiresAt);
+}
+
+export function getValidResetToken(tokenHash) {
+  const dbConn = getDb();
+  return dbConn.prepare("SELECT * FROM password_reset_tokens WHERE token_hash = ? AND used = 0 AND expires_at > datetime('now')").get(tokenHash);
+}
+
+export function markResetTokenUsed(tokenHash) {
+  const dbConn = getDb();
+  dbConn.prepare('UPDATE password_reset_tokens SET used = 1 WHERE token_hash = ?').run(tokenHash);
+}
+
+export function updateUserPassword(userId, newPasswordHash) {
+  const dbConn = getDb();
+  dbConn.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newPasswordHash, userId);
+}
+
+export function getUserByEmailWithHash(email) {
+  const dbConn = getDb();
+  return dbConn.prepare('SELECT * FROM users WHERE email = ?').get(email);
 }
