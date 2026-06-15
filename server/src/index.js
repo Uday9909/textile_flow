@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 dotenv.config({ path: 'server/.env' });
 
 import authRouter from './routes/auth.js';
+import notificationsRouter from './routes/notifications.js';
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -25,6 +26,8 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/notifications', notificationsRouter);
+app.use('/api/whatsapp', notificationsRouter);
 
 app.listen(PORT, () => {
   console.log(`TextileFlow server running on port ${PORT}`);
