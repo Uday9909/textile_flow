@@ -24,7 +24,7 @@ import ProductionHistory from './pages/ProductionHistory';
 
 function AppContent() {
   const { state } = useApp();
-  const { user, status } = useAuth();
+  const { user, status, welcomeMessage, clearWelcome } = useAuth();
 
   // Wait for auth to resolve
   if (status === 'loading') return null;
@@ -39,6 +39,11 @@ function AppContent() {
       <Sidebar />
       <div className="main-content">
         <TopBar />
+        {welcomeMessage && (
+          <div className="toast toast-success" onClick={clearWelcome}>
+            {welcomeMessage}
+          </div>
+        )}
         <Routes>
 
           {/* Routes shared by all roles */}

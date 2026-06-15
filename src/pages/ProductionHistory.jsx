@@ -1,5 +1,5 @@
 // ============================================================
-// Production History — Lot traceability & timeline
+// Past Jobs — Lot traceability & timeline
 // ============================================================
 
 import { useState, useMemo } from 'react';
@@ -73,7 +73,7 @@ export default function ProductionHistory() {
       <div className="page-header">
         <h1>
           <History size={36} style={{ verticalAlign: 'middle', marginRight: '12px' }} />
-          Production History
+          Past Jobs
         </h1>
         <p>Full lot traceability and audit trail</p>
       </div>

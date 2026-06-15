@@ -120,7 +120,7 @@ export default function CreateLot() {
       <div className="page-header">
         <h1>
           <Package size={36} style={{ verticalAlign: 'middle', marginRight: '12px' }} />
-          Create New Lot
+          New Job
         </h1>
         <p>Enter lot details and select a workflow to begin processing</p>
         <button className="btn btn-secondary" onClick={() => setShowScanner(true)} style={{ marginTop: 'var(--space-2)' }}>

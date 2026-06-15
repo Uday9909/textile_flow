@@ -8,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { STAGE_POOL } from '../../data/mockData';
 import {
   Plus, LayoutDashboard, Brain, Truck, History,
-  Factory, Menu, X, RotateCcw
+  Factory, Menu, X
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -16,7 +16,7 @@ import { useState } from 'react';
 const QUEUE_DEPARTMENTS = ['grey', 'batching', 'scouring', 'bleaching', 'dyeing', 'hydro', 'drying', 'printing', 'brushing', 'compacting', 'anti_pilling', 'finishing', 'packing'];
 
 export default function Sidebar() {
-  const { state, getWaitingLots, getInProcessLots, resetData } = useApp();
+  const { state, getWaitingLots, getInProcessLots } = useApp();
   const { user: authUser } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -79,7 +79,7 @@ export default function Sidebar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   <Plus size={18} />
-                  <span>Create Lot</span>
+                  <span>New Job</span>
                 </NavLink>
                 <NavLink
                   to="/supervisor"
@@ -95,7 +95,7 @@ export default function Sidebar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   <Brain size={18} />
-                  <span>AI Supervisor</span>
+                  <span>AI Insights</span>
                 </NavLink>
               </nav>
             </div>
@@ -140,16 +140,8 @@ export default function Sidebar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   <History size={18} />
-                  <span>Production History</span>
+                  <span>Past Jobs</span>
                 </NavLink>
-                <button
-                  className="sidebar-nav-item"
-                  onClick={() => { resetData(); setMobileOpen(false); }}
-                  style={{ color: 'var(--text-tertiary)', fontSize: 'var(--font-size-xs)' }}
-                >
-                  <RotateCcw size={14} />
-                  <span>Reset Demo Data</span>
-                </button>
               </nav>
             </div>
           </>
@@ -211,7 +203,7 @@ export default function Sidebar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   <History size={18} />
-                  <span>Production History</span>
+                  <span>Past Jobs</span>
                 </NavLink>
               </nav>
             </div>

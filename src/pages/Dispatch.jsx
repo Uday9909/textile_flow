@@ -32,7 +32,7 @@ export default function Dispatch() {
       <div className="page-header">
         <h1>
           <Truck size={36} style={{ verticalAlign: 'middle', marginRight: '12px' }} />
-          Dispatch Station
+          Dispatch
         </h1>
         <p>Final inspection and challan generation before lots leave the factory</p>
       </div>

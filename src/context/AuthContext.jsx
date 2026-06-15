@@ -6,7 +6,7 @@
 // localStorage, per PITFALLS.md rule #1.
 // ============================================================
 
-import { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
+import { createContext, useContext, useReducer, useEffect, useCallback, useState } from 'react';
 import { login as apiLogin, logout as apiLogout, me as apiMe, setAccessToken, clearAccessToken } from '../api';
 
 const AuthContext = createContext(null);
@@ -47,6 +47,7 @@ function authReducer(state, action) {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [welcomeMessage, setWelcomeMessage] = useState('');
 
   // Restore session on mount — /api/auth/me triggers silent refresh
   // via api.js 401 interceptor if access token is stale
@@ -76,6 +77,8 @@ export function AuthProvider({ children }) {
     try {
       const data = await apiLogin(email, password);
       dispatch({ type: 'AUTH_LOGIN_SUCCESS', payload: data.user });
+      setWelcomeMessage(`Welcome, ${data.user.name}!`);
+      setTimeout(() => setWelcomeMessage(''), 4000);
     } catch (err) {
       dispatch({ type: 'AUTH_LOGIN_FAILURE', payload: err.message });
     }
@@ -109,7 +112,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, logout, welcomeMessage, clearWelcome: () => setWelcomeMessage('') }}>
       {children}
     </AuthContext.Provider>
   );

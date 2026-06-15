@@ -80,7 +80,7 @@ export default function AIPanel() {
       <div className="page-header">
         <h1>
           <Brain size={36} style={{ verticalAlign: 'middle', marginRight: '12px' }} />
-          Production Intelligence
+          AI Insights
         </h1>
         <p>AI-powered delay detection and department performance analysis</p>
       </div>

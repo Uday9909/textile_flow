@@ -945,6 +945,29 @@ h5 { font-size: var(--font-size-lg); }
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ── Welcome Toast ── */
+.toast {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5000;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 3.5s forwards;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast-success {
+  background: #065f46;
+  color: #d1fae5;
+  border: 1px solid #059669;
+}
+@keyframes toastIn { from { opacity: 0; top: 50px; } to { opacity: 1; top: 70px; } }
+@keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
 /* ── Notification Overlay ── */
 .notification-banner {
   position: fixed;

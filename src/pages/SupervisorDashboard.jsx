@@ -88,7 +88,7 @@ export default function SupervisorDashboard() {
       <div className="page-header">
         <h1>
           <LayoutDashboard size={36} style={{ verticalAlign: 'middle', marginRight: '12px' }} />
-          Management Dashboard
+          Factory Overview
         </h1>
         <p>Factory floor overview and production intelligence</p>
       </div>
