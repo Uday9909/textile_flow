@@ -889,6 +889,44 @@ h5 { font-size: var(--font-size-lg); }
   animation: scaleIn 200ms ease;
 }
 
+.modal-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  box-shadow: var(--shadow-elevated);
+  animation: scaleIn 200ms ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+}
+.modal-header h2 {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin: 0;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+}
+.modal-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
 .modal-title {
   font-size: var(--font-size-xl);
   font-weight: 700;
