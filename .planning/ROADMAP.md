@@ -9,7 +9,7 @@
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
-| 2 | Role Enforcement & Password Reset | ○ Planned | 3/3 | 0% |
+| 2 | Role Enforcement & Password Reset | ◆ In Progress | 2/3 | 67% |
 | 3 | WhatsApp Notifications | ○ Pending | 0/0 | 0% |
 | 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
 
@@ -57,7 +57,7 @@ Plans:
 
 Plans:
 - [ ] 02-01-PLAN.md — Backend role middleware (authorize) + password reset API endpoints
-- [ ] 02-02-PLAN.md — Frontend role-based route protection + role-filtered sidebar
+- [x] 02-02-PLAN.md — Frontend role-based route protection + role-filtered sidebar
 - [ ] 02-03-PLAN.md — Frontend password reset pages (ForgotPassword + ResetPassword)
 
 ### Phase 3: WhatsApp Notifications
@@ -104,9 +104,9 @@ Phase 1 (Auth Foundation)
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
 | AUTH-05 | Phase 2 | Pending |
-| AUTH-06 | Phase 2 | Pending |
+| AUTH-06 | Phase 2 | Complete |
 | AUTH-07 | Phase 1 | Pending |
-| AUTH-08 | Phase 2 | Pending |
+| AUTH-08 | Phase 2 | Complete |
 | WHATS-01 | Phase 3 | Pending |
 | WHATS-02 | Phase 3 | Pending |
 | WHATS-03 | Phase 3 | Pending |

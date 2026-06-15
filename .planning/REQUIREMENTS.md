@@ -14,9 +14,9 @@ Requirements for initial milestone. Each maps to roadmap phases.
 - [ ] **AUTH-03**: User can log out and clear session
 - [ ] **AUTH-04**: User session persists across page refresh
 - [ ] **AUTH-05**: User can reset password via email link
-- [ ] **AUTH-06**: System enforces three roles — Operator, Supervisor, Admin
+- [x] **AUTH-06**: System enforces three roles — Operator, Supervisor, Admin
 - [ ] **AUTH-07**: Unauthenticated users are redirected to login page
-- [ ] **AUTH-08**: Users can only access pages their role permits
+- [x] **AUTH-08**: Users can only access pages their role permits
 
 ### WhatsApp Notifications
 
@@ -69,9 +69,9 @@ Deferred to future releases.
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
 | AUTH-05 | Phase 2 | Pending |
-| AUTH-06 | Phase 2 | Pending |
+| AUTH-06 | Phase 2 | Complete |
 | AUTH-07 | Phase 1 | Pending |
-| AUTH-08 | Phase 2 | Pending |
+| AUTH-08 | Phase 2 | Complete |
 | WHATS-01 | Phase 3 | Pending |
 | WHATS-02 | Phase 3 | Pending |
 | WHATS-03 | Phase 3 | Pending |
