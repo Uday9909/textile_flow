@@ -10,6 +10,7 @@ import {
   generateId, generateLotNumber, getStageById,
 } from '../data/mockData';
 import CustomWorkflowBuilder from '../components/CreateLot/CustomWorkflowBuilder';
+import { notifyLotArrival } from '../api';
 import { Plus, Package, ArrowRight, Layers, Palette, Weight, Building2 } from 'lucide-react';
 
 export default function CreateLot() {
@@ -88,6 +89,14 @@ export default function CreateLot() {
     };
 
     dispatch({ type: 'CREATE_LOT', payload: { lot } });
+
+    // Fire-and-forget WhatsApp arrival notification
+    notifyLotArrival({
+      lotNumber: lot.lotNumber,
+      partyName: lot.partyName,
+      quantity: lot.quantity,
+    }).catch(() => {});
+
     navigate(`/queue/${workflow.stages[0]}`);
   };
 
