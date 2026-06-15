@@ -154,3 +154,21 @@ export async function resetPassword(token, password) {
 
   return data;
 }
+
+// ── Notification helpers (fire-and-forget) ──
+
+export async function notifyLotArrival({ lotNumber, partyName, quantity }) {
+  const res = await api('/api/notifications/lot-arrival', {
+    method: 'POST',
+    body: JSON.stringify({ lotNumber, partyName, quantity }),
+  });
+  return res.json().catch(() => ({}));
+}
+
+export async function notifyLotDispatch({ lotNumber, partyName, quantity }) {
+  const res = await api('/api/notifications/lot-dispatch', {
+    method: 'POST',
+    body: JSON.stringify({ lotNumber, partyName, quantity }),
+  });
+  return res.json().catch(() => ({}));
+}
