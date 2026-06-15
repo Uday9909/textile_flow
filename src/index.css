@@ -1511,55 +1511,6 @@ tr:hover td {
 }
 
 /* ── Operator Prompt ── */
-.operator-prompt-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5000;
-}
-
-.operator-prompt-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  padding: var(--space-10);
-  max-width: 480px;
-  width: 100%;
-  text-align: center;
-  box-shadow: var(--shadow-elevated);
-}
-
-.operator-prompt-card h2 {
-  margin-bottom: var(--space-2);
-}
-
-.operator-prompt-card p {
-  color: var(--text-secondary);
-  margin-bottom: var(--space-6);
-}
-
-/* ── Print Styles ── */
-@media print {
-  .sidebar, .top-bar, .notification-banner, .undo-toast {
-    display: none !important;
-  }
-  body {
-    background: white;
-    color: black;
-  }
-  .main-content {
-    height: auto;
-  }
-  .card {
-    border: 1px solid #ccc;
-    box-shadow: none;
-    background: white;
-  }
-}
-
 /* ── Login Page ── */
 .login-page {
   display: flex;

@@ -16,7 +16,7 @@ import { useState } from 'react';
 const QUEUE_DEPARTMENTS = ['grey', 'batching', 'scouring', 'bleaching', 'dyeing', 'hydro', 'drying', 'printing', 'brushing', 'compacting', 'anti_pilling', 'finishing', 'packing'];
 
 export default function Sidebar() {
-  const { state, dispatch, getWaitingLots, getInProcessLots, resetData } = useApp();
+  const { state, getWaitingLots, getInProcessLots, resetData } = useApp();
   const { user: authUser } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,10 +33,6 @@ export default function Sidebar() {
     const count = getDeptCount(deptId);
     return count > 0 || ['grey', 'batching', 'dyeing', 'hydro', 'drying', 'finishing', 'packing'].includes(deptId);
   });
-
-  const handleSwitchUser = () => {
-    dispatch({ type: 'CLEAR_OPERATOR' });
-  };
 
   return (
     <>

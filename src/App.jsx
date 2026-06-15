@@ -30,6 +30,7 @@ function AppContent() {
   if (status === 'loading') return null;
 
   const authRole = user?.role || 'operator';
+  const deptFallback = state.department || 'dyeing';
 
   // ── Role-based routing ──
 
@@ -41,9 +42,9 @@ function AppContent() {
         <Routes>
 
           {/* Routes shared by all roles */}
-          <Route path="/" element={<Navigate to={`/queue/${state.department || 'dyeing'}`} replace />} />
+          <Route path="/" element={<Navigate to={authRole === 'operator' ? `/queue/${deptFallback}` : '/supervisor'} replace />} />
           <Route path="/queue/:department" element={<DepartmentQueue />} />
-          <Route path="*" element={<Navigate to={`/queue/${state.department || 'dyeing'}`} replace />} />
+          <Route path="*" element={<Navigate to={authRole === 'operator' ? `/queue/${deptFallback}` : '/supervisor'} replace />} />
 
           {/* Supervisor + Admin routes */}
           {(authRole === 'supervisor' || authRole === 'admin') && (
