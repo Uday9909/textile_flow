@@ -1675,3 +1675,24 @@ tr:hover td {
   color: var(--text-primary);
   border-color: var(--text-secondary);
 }
+
+/* ── Challan Scanner Modal ── */
+.challan-scanner { max-width: 500px; }
+.scanner-body { padding: var(--space-4); }
+.scanner-upload { text-align: center; padding: var(--space-8); }
+.scanner-upload-icon { color: var(--text-secondary); margin-bottom: var(--space-4); }
+.scanner-buttons { display: flex; gap: var(--space-2); justify-content: center; margin-top: var(--space-4); }
+.scanner-preview { display: flex; flex-direction: column; gap: var(--space-3); }
+.scanner-img { max-width: 100%; max-height: 300px; object-fit: contain; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+.scanner-progress { text-align: center; color: var(--text-secondary); font-size: var(--font-size-sm); }
+.scanner-progress .progress-bar { height: 6px; background: var(--border-color); border-radius: 3px; margin: var(--space-2) 0; overflow: hidden; }
+.scanner-progress .progress-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+.scanner-results h3 { display: flex; align-items: center; gap: var(--space-2); color: var(--success, #22c55e); margin-bottom: var(--space-3); }
+.extracted-fields { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); }
+.extracted-field { display: flex; justify-content: space-between; padding: var(--space-2); background: var(--bg-primary); border-radius: var(--radius-md); }
+.extracted-field label { color: var(--text-secondary); font-size: var(--font-size-sm); }
+.extracted-field span { color: var(--text-primary); font-weight: 500; }
+.scanner-actions { display: flex; gap: var(--space-2); }
+.scanner-error { text-align: center; color: #ef4444; padding: var(--space-4); }
+.spinner { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

@@ -10,8 +10,9 @@ import {
   generateId, generateLotNumber, getStageById,
 } from '../data/mockData';
 import CustomWorkflowBuilder from '../components/CreateLot/CustomWorkflowBuilder';
+import ChallanScanner from '../components/CreateLot/ChallanScanner';
 import { notifyLotArrival } from '../api';
-import { Plus, Package, ArrowRight, Layers, Palette, Weight, Building2 } from 'lucide-react';
+import { Plus, Package, ArrowRight, Layers, Palette, Weight, Building2, Scan } from 'lucide-react';
 
 export default function CreateLot() {
   const { state, dispatch } = useApp();
@@ -29,7 +30,15 @@ export default function CreateLot() {
   const [selectedWorkflow, setSelectedWorkflow] = useState(null);
   const [customStages, setCustomStages] = useState(null);
   const [showCustomBuilder, setShowCustomBuilder] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const handleScanComplete = (data) => {
+    if (data.partyName) handleChange('partyName', data.partyName);
+    if (data.quantity) handleChange('quantity', data.quantity);
+    if (data.lotNumber) handleChange('lotNumber', data.lotNumber);
+    setShowScanner(false);
+  };
 
   const allWorkflows = [...state.workflows, ...(customStages ? [{
     id: 'custom_' + Date.now(),
@@ -114,7 +123,14 @@ export default function CreateLot() {
           Create New Lot
         </h1>
         <p>Enter lot details and select a workflow to begin processing</p>
+        <button className="btn btn-secondary" onClick={() => setShowScanner(true)} style={{ marginTop: 'var(--space-2)' }}>
+          <Scan size={16} /> Scan Challan
+        </button>
       </div>
+
+      {showScanner && (
+        <ChallanScanner onScanComplete={handleScanComplete} onClose={() => setShowScanner(false)} />
+      )}
 
       {/* Form */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 'var(--space-5)', marginBottom: 'var(--space-8)' }}>
