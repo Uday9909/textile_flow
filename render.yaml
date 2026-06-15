@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: textileflow-server
+    runtime: node
+    repo: https://github.com/Uday9909/textile_flow.git
+    plan: free
+    region: singapore
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node src/index.js
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: WHATSAPP_MODE
+        value: log
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://keshav-cpcdrhnmi-udaybirs-projects.vercel.app
