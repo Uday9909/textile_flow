@@ -12,6 +12,8 @@ import {
 } from '../services/whatsapp.js';
 import {
   getPartyByName,
+  upsertLot,
+  markLotDispatched,
 } from '../db.js';
 
 const router = Router();
@@ -38,6 +40,13 @@ router.post('/lot-arrival', async (req, res) => {
       reason: 'Party not found or no phone number configured',
       partyName,
     });
+  }
+
+  // Store lot data server-side for inbound WhatsApp queries (WHATS-04)
+  try {
+    upsertLot(lotNumber, party.name, quantity, fabricType || '');
+  } catch (err) {
+    console.error(`[Lot Sync] Failed to store lot ${lotNumber}:`, err.message);
   }
 
   const message = composeArrivalMessage(party.name, lotNumber, quantity, fabricType);
@@ -69,6 +78,13 @@ router.post('/lot-dispatch', async (req, res) => {
       reason: 'Party not found or no phone number configured',
       partyName,
     });
+  }
+
+  // Update lot status for inbound WhatsApp queries (WHATS-04)
+  try {
+    markLotDispatched(lotNumber);
+  } catch (err) {
+    console.error(`[Lot Sync] Failed to mark lot ${lotNumber} as dispatched:`, err.message);
   }
 
   const message = composeDispatchMessage(party.name, lotNumber, quantity);
