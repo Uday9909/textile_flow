@@ -140,17 +140,14 @@ export default function CreateLot() {
             <Building2 size={14} style={{ verticalAlign: 'middle', marginRight: '6px' }} />
             Party Name
           </label>
-          <input
+          <select
             className="form-input"
-            type="text"
-            placeholder="e.g., Satya International"
             value={formData.partyName}
             onChange={e => handleChange('partyName', e.target.value)}
-            list="party-suggestions"
-          />
-          <datalist id="party-suggestions">
-            {PARTIES.map(p => <option key={p} value={p} />)}
-          </datalist>
+          >
+            <option value="">-- Select Party --</option>
+            {PARTIES.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
           {errors.partyName && <span style={{ color: 'var(--priority-urgent)', fontSize: 'var(--font-size-sm)' }}>{errors.partyName}</span>}
         </div>
 

@@ -8,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { STAGE_POOL } from '../../data/mockData';
 import {
   Plus, LayoutDashboard, Brain, Truck, History,
-  Factory, Menu, X, RotateCcw, LogOut
+  Factory, Menu, X, RotateCcw
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -219,23 +219,6 @@ export default function Sidebar() {
                 </NavLink>
               </nav>
             </div>
-
-            {/* Operator context */}
-            <div className="sidebar-section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-              <div className="sidebar-section-title" style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
-                Signed in as <strong style={{ color: 'var(--text-secondary)' }}>{state.operatorName}</strong>
-              </div>
-              <nav className="sidebar-nav">
-                <button
-                  className="sidebar-nav-item"
-                  onClick={() => { handleSwitchUser(); setMobileOpen(false); }}
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <LogOut size={16} />
-                  <span>Switch Department</span>
-                </button>
-              </nav>
-            </div>
           </>
         ) : (
           /* ── Operator Sidebar ── */
@@ -258,21 +241,6 @@ export default function Sidebar() {
               </nav>
             </div>
 
-            <div className="sidebar-section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-              <div className="sidebar-section-title" style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
-                Signed in as <strong style={{ color: 'var(--text-secondary)' }}>{state.operatorName}</strong>
-              </div>
-              <nav className="sidebar-nav">
-                <button
-                  className="sidebar-nav-item"
-                  onClick={() => { handleSwitchUser(); setMobileOpen(false); }}
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <LogOut size={16} />
-                  <span>Switch User</span>
-                </button>
-              </nav>
-            </div>
           </>
         )}
       </aside>

@@ -9,7 +9,6 @@ import Sidebar from './components/Layout/Sidebar';
 import TopBar from './components/Layout/TopBar';
 import NotificationOverlay from './components/Layout/NotificationOverlay';
 import UndoToast from './components/common/UndoToast';
-import OperatorPrompt from './components/Layout/OperatorPrompt';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import ForgotPassword from './pages/ForgotPassword';
@@ -31,11 +30,6 @@ function AppContent() {
   if (status === 'loading') return null;
 
   const authRole = user?.role || 'operator';
-
-  // Show operator prompt if no name set
-  if (!state.operatorName) {
-    return <OperatorPrompt />;
-  }
 
   // ── Role-based routing ──
 
