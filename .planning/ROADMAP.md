@@ -8,7 +8,7 @@
 
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
-| 1 | Auth Foundation | ○ Pending | 0/0 | 0% |
+| 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
 | 2 | Role Enforcement & Password Reset | ○ Pending | 0/0 | 0% |
 | 3 | WhatsApp Notifications | ○ Pending | 0/0 | 0% |
 | 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
@@ -31,6 +31,12 @@
 - AUTH-03: User can log out and clear session
 - AUTH-04: User session persists across page refresh
 - AUTH-07: Unauthenticated users are redirected to login page
+
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Express backend + SQLite DB + JWT auth API (login/refresh/logout/me)
+- [ ] 01-02-PLAN.md — AuthContext + LoginPage + ProtectedRoute + App.jsx wiring
 
 ### Phase 2: Role Enforcement & Password Reset
 **Goal:** Three-role access control (Operator, Supervisor, Admin), role-based route protection, and password reset flow
