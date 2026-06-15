@@ -14,8 +14,15 @@ import {
   storeRefreshToken,
   getRefreshToken,
   deleteRefreshToken,
+  storeResetToken,
+  getValidResetToken,
+  markResetTokenUsed,
+  updateUserPassword,
+  getUserByEmailWithHash,
 } from '../db.js';
 import { authenticate } from '../middleware/authenticate.js';
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 const router = Router();
 
@@ -25,6 +32,14 @@ const loginLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Too many login attempts. Please try again later.' },
+});
+
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many password reset requests. Try again later.' },
 });
 
 const REFRESH_COOKIE_OPTIONS = {
@@ -70,6 +85,55 @@ router.post('/login', loginLimiter, async (req, res) => {
     accessToken,
     accessTokenExpiresIn: parseInt(process.env.JWT_ACCESS_EXPIRES_IN || '900', 10),
   });
+});
+
+router.post('/forgot-password', forgotPasswordLimiter, async (req, res) => {
+  const { email } = req.body;
+
+  if (!email || typeof email !== 'string') {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  const user = getUserByEmailWithHash(email);
+
+  if (!user) {
+    return res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
+  }
+
+  const token = crypto.randomUUID();
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+  storeResetToken(tokenHash, user.id, expiresAt);
+
+  console.log(`\n[Password Reset] Link for ${user.email}: http://localhost:5173/reset-password/${token}\n`);
+
+  res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
+});
+
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password || typeof token !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ error: 'Token and password are required' });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters' });
+  }
+
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const resetToken = getValidResetToken(tokenHash);
+
+  if (!resetToken) {
+    return res.status(400).json({ error: 'Invalid or expired reset token' });
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  updateUserPassword(resetToken.user_id, passwordHash);
+  markResetTokenUsed(tokenHash);
+
+  res.json({ message: 'Password has been reset successfully' });
 });
 
 router.post('/refresh', async (req, res) => {
