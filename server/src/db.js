@@ -91,7 +91,19 @@ function seedUsers() {
   const users = [
     { id: crypto.randomUUID(), email: 'admin@textileflow.com', name: 'Admin User', password: 'password123', role: 'admin', department: 'admin' },
     { id: crypto.randomUUID(), email: 'supervisor@textileflow.com', name: 'Supervisor User', password: 'password123', role: 'supervisor', department: 'admin' },
-    { id: crypto.randomUUID(), email: 'operator@textileflow.com', name: 'Operator User', password: 'password123', role: 'operator', department: 'dyeing' },
+    { id: crypto.randomUUID(), email: 'grey@textileflow.com', name: 'Grey Operator', password: 'password123', role: 'operator', department: 'grey' },
+    { id: crypto.randomUUID(), email: 'batching@textileflow.com', name: 'Batching Operator', password: 'password123', role: 'operator', department: 'batching' },
+    { id: crypto.randomUUID(), email: 'scouring@textileflow.com', name: 'Scouring Operator', password: 'password123', role: 'operator', department: 'scouring' },
+    { id: crypto.randomUUID(), email: 'bleaching@textileflow.com', name: 'Bleaching Operator', password: 'password123', role: 'operator', department: 'bleaching' },
+    { id: crypto.randomUUID(), email: 'dyeing@textileflow.com', name: 'Dyeing Operator', password: 'password123', role: 'operator', department: 'dyeing' },
+    { id: crypto.randomUUID(), email: 'hydro@textileflow.com', name: 'Hydro Operator', password: 'password123', role: 'operator', department: 'hydro' },
+    { id: crypto.randomUUID(), email: 'drying@textileflow.com', name: 'Drying Operator', password: 'password123', role: 'operator', department: 'drying' },
+    { id: crypto.randomUUID(), email: 'printing@textileflow.com', name: 'Printing Operator', password: 'password123', role: 'operator', department: 'printing' },
+    { id: crypto.randomUUID(), email: 'brushing@textileflow.com', name: 'Brushing Operator', password: 'password123', role: 'operator', department: 'brushing' },
+    { id: crypto.randomUUID(), email: 'compacting@textileflow.com', name: 'Compacting Operator', password: 'password123', role: 'operator', department: 'compacting' },
+    { id: crypto.randomUUID(), email: 'antipilling@textileflow.com', name: 'Anti Pilling Operator', password: 'password123', role: 'operator', department: 'anti_pilling' },
+    { id: crypto.randomUUID(), email: 'finishing@textileflow.com', name: 'Finishing Operator', password: 'password123', role: 'operator', department: 'finishing' },
+    { id: crypto.randomUUID(), email: 'packing@textileflow.com', name: 'Packing Operator', password: 'password123', role: 'operator', department: 'packing' },
   ];
 
   const insert = db.prepare(

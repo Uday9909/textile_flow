@@ -21,7 +21,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const authRole = authUser?.role || 'operator';
-  const userDept = state.department;
+  const userDept = authRole === 'operator' ? (authUser?.department || 'dyeing') : state.department;
 
   // Count lots per department for badges
   const getDeptCount = (deptId) => {

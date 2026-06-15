@@ -30,7 +30,8 @@ function AppContent() {
   if (status === 'loading') return null;
 
   const authRole = user?.role || 'operator';
-  const deptFallback = state.department || 'dyeing';
+  // Operators use their auth-assigned department; others default to dyeing
+  const userDept = authRole === 'operator' ? (user?.department || 'dyeing') : (state.department || 'dyeing');
 
   // ── Role-based routing ──
 
@@ -47,9 +48,9 @@ function AppContent() {
         <Routes>
 
           {/* Routes shared by all roles */}
-          <Route path="/" element={<Navigate to={authRole === 'operator' ? `/queue/${deptFallback}` : '/supervisor'} replace />} />
+          <Route path="/" element={<Navigate to={authRole === 'operator' ? `/queue/${userDept}` : '/supervisor'} replace />} />
           <Route path="/queue/:department" element={<DepartmentQueue />} />
-          <Route path="*" element={<Navigate to={authRole === 'operator' ? `/queue/${deptFallback}` : '/supervisor'} replace />} />
+          <Route path="*" element={<Navigate to={authRole === 'operator' ? `/queue/${userDept}` : '/supervisor'} replace />} />
 
           {/* Supervisor + Admin routes */}
           {(authRole === 'supervisor' || authRole === 'admin') && (
