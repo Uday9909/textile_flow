@@ -9,7 +9,7 @@
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
-| 2 | Role Enforcement & Password Reset | ◆ In Progress | 2/3 | 67% |
+| 2 | Role Enforcement & Password Reset | ◆ Complete | 3/3 | 100% |
 | 3 | WhatsApp Notifications | ○ Pending | 0/0 | 0% |
 | 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
 
@@ -58,7 +58,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Backend role middleware (authorize) + password reset API endpoints
 - [x] 02-02-PLAN.md — Frontend role-based route protection + role-filtered sidebar
-- [ ] 02-03-PLAN.md — Frontend password reset pages (ForgotPassword + ResetPassword)
+- [x] 02-03-PLAN.md — Frontend password reset pages (ForgotPassword + ResetPassword)
 
 ### Phase 3: WhatsApp Notifications
 **Goal:** WhatsApp Business API integration with automatic notifications to parties on lot arrival and dispatch
