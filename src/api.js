@@ -5,7 +5,8 @@
 // per PITFALLS.md rule #1: localStorage JWT is XSS-exposed.
 // ============================================================
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const BASE_URL = import.meta.env.VITE_API_URL || (location.hostname !== 'localhost' ? 'https://textile-flow.onrender.com' : 'http://localhost:3001');
+
 
 let accessToken = null;
 
