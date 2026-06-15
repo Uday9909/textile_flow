@@ -13,7 +13,7 @@ Requirements for initial milestone. Each maps to roadmap phases.
 - [ ] **AUTH-02**: User can log in with email and password (JWT session)
 - [ ] **AUTH-03**: User can log out and clear session
 - [ ] **AUTH-04**: User session persists across page refresh
-- [ ] **AUTH-05**: User can reset password via email link
+- [x] **AUTH-05**: User can reset password via email link
 - [x] **AUTH-06**: System enforces three roles — Operator, Supervisor, Admin
 - [ ] **AUTH-07**: Unauthenticated users are redirected to login page
 - [x] **AUTH-08**: Users can only access pages their role permits
@@ -68,7 +68,7 @@ Deferred to future releases.
 | AUTH-02 | Phase 1 | Pending |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 2 | Pending |
+| AUTH-05 | Phase 2 | Complete |
 | AUTH-06 | Phase 2 | Complete |
 | AUTH-07 | Phase 1 | Pending |
 | AUTH-08 | Phase 2 | Complete |

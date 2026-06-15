@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 02-role-enforcement-password-reset
 status: Executing Phase 2
-last_updated: "2026-06-15T15:15:00.000Z"
+last_updated: "2026-06-15T15:20:24Z"
 progress:
   total_phases: 4
   completed_phases: 0
@@ -41,7 +41,7 @@ See: .planning/PROJECT.md (updated 2026-06-15)
 | Phases planned | 4 |
 | Phases complete | 0 |
 | Plans created | 15 |
-| Plans complete | 4 |
+| Plans complete | 5 |
 
 ## Key Decisions
 
@@ -55,6 +55,10 @@ See: .planning/PROJECT.md (updated 2026-06-15)
 | Frontend role gating via useAuth().user.role | Backend authorize middleware is authoritative; frontend gating is UX-only | Implemented |
 | Supervisor sidebar uses "Switch Department" label | Mirrors operator pattern but contextually accurate for supervisor role | Implemented |
 | Wrong-role users redirected to root | Root role-redirects to appropriate default route via AppContent | Implemented |
+| Same email response in forgot-password | Prevents email enumeration (T-02-03) | Implemented |
+| Token stored as SHA-256 hash | DB compromise does not reveal valid tokens (T-02-01) | Implemented |
+| 15-min expiry + single-use on reset tokens | Prevents replay attacks | Implemented |
+| authorize factory with variadic roles | Flexible per-route gating (T-02-02) | Implemented |
 
 ## Blockers
 

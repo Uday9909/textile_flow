@@ -56,7 +56,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Backend role middleware (authorize) + password reset API endpoints
+- [x] 02-01-PLAN.md — Backend role middleware (authorize) + password reset API endpoints
 - [x] 02-02-PLAN.md — Frontend role-based route protection + role-filtered sidebar
 - [ ] 02-03-PLAN.md — Frontend password reset pages (ForgotPassword + ResetPassword)
 
@@ -103,7 +103,7 @@ Phase 1 (Auth Foundation)
 | AUTH-02 | Phase 1 | Pending |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 2 | Pending |
+| AUTH-05 | Phase 2 | Complete |
 | AUTH-06 | Phase 2 | Complete |
 | AUTH-07 | Phase 1 | Pending |
 | AUTH-08 | Phase 2 | Complete |
