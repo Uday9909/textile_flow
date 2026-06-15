@@ -120,3 +120,37 @@ export async function refresh() {
   }
   return data;
 }
+
+// ── Public endpoints (no auth token needed) ──
+
+export async function forgotPassword(email) {
+  const res = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Password reset request failed');
+  }
+
+  return data;
+}
+
+export async function resetPassword(token, password) {
+  const res = await fetch(`${BASE_URL}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, password }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Password reset failed');
+  }
+
+  return data;
+}
