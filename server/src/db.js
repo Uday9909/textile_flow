@@ -9,7 +9,7 @@ let db = null;
 export function getDb() {
   if (db) return db;
 
-  const dataDir = path.resolve('server/data');
+  const dataDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../data');
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }

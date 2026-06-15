@@ -7,8 +7,8 @@
 
 import { useState, useRef } from 'react';
 import { Scan, X, Check, Loader } from 'lucide-react';
-import { PARTIES } from '../data/mockData';
-import { api } from '../api';
+import { PARTIES } from '../../data/mockData';
+import { api } from '../../api';
 
 export default function ChallanScanner({ onScanComplete, onClose }) {
   const [image, setImage] = useState(null);

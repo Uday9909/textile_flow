@@ -6,20 +6,22 @@
 //   WHATSAPP_MODE=twilio — send via Twilio API (production)
 // ============================================================
 
-const MODE = process.env.WHATSAPP_MODE || 'log';
+function getMode() {
+  return process.env.WHATSAPP_MODE || 'log';
+}
 
 // Lazy-import twilio only when in production mode
 let twilioClient = null;
 
-function getTwilioClient() {
-  if (!twilioClient && MODE === 'twilio') {
+async function getTwilioClient() {
+  if (!twilioClient && getMode() === 'twilio') {
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     if (!accountSid || !authToken) {
       console.warn('Twilio credentials not configured — falling back to log mode');
       return null;
     }
-    const twilio = require('twilio');
+    const { default: twilio } = await import('twilio');
     twilioClient = twilio(accountSid, authToken);
   }
   return twilioClient;
@@ -34,11 +36,11 @@ function getTwilioClient() {
 export async function sendWhatsApp(to, body) {
   if (!to) {
     console.warn('[WhatsApp] No phone number provided — skipping');
-    return { sent: false, mode: MODE, reason: 'no_recipient' };
+    return { sent: false, mode: getMode(), reason: 'no_recipient' };
   }
 
-  if (MODE === 'twilio') {
-    const client = getTwilioClient();
+  if (getMode() === 'twilio') {
+    const client = await getTwilioClient();
     if (!client) {
       console.warn('[WhatsApp] Twilio client not available — falling back to log');
       return sendLog(to, body);
