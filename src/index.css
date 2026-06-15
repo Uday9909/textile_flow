@@ -1701,3 +1701,44 @@ tr:hover td {
 .scanner-error { text-align: center; color: #ef4444; padding: var(--space-4); }
 .spinner { animation: spin 1s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ── Analytics Page ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+}
+.stat-icon { margin: 0 auto var(--space-2); }
+.stat-icon.blue { color: #3b82f6; }
+.stat-icon.yellow { color: #f59e0b; }
+.stat-icon.green { color: #10b981; }
+.stat-icon.teal { color: #14b8a6; }
+.stat-icon.purple { color: #8b5cf6; }
+.stat-icon.orange { color: #f97316; }
+.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+.stat-label { font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: var(--space-1); }
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+@media (max-width: 768px) { .charts-row { grid-template-columns: 1fr; } }
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+.chart-title { margin: 0 0 var(--space-4); font-size: var(--font-size-base); color: var(--text-primary); }
+.table-wrapper { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+.data-table th, .data-table td { padding: var(--space-2) var(--space-3); text-align: left; border-bottom: 1px solid var(--border-color); }
+.data-table th { color: var(--text-secondary); font-weight: 500; font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.05em; }
+.status-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: var(--font-size-xs); font-weight: 500; }
+.status-complete { background: rgba(16,185,129,0.15); color: #10b981; }
+.status-inprocess { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.status-waiting { background: rgba(245,158,11,0.15); color: #f59e0b; }

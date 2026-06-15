@@ -21,6 +21,7 @@ import Dispatch from './pages/Dispatch';
 import AIPanel from './pages/AIPanel';
 import SupervisorDashboard from './pages/SupervisorDashboard';
 import ProductionHistory from './pages/ProductionHistory';
+import Analytics from './pages/Analytics';
 
 function AppContent() {
   const { state } = useApp();
@@ -66,6 +67,7 @@ function AppContent() {
             <>
               <Route path="/create" element={<CreateLot />} />
               <Route path="/ai-panel" element={<AIPanel />} />
+              <Route path="/analytics" element={<Analytics />} />
             </>
           )}
 

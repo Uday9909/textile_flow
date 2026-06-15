@@ -7,7 +7,7 @@ import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import { STAGE_POOL } from '../../data/mockData';
 import {
-  Plus, LayoutDashboard, Brain, Truck, History,
+  Plus, LayoutDashboard, Brain, Truck, History, TrendingUp,
   Factory, Menu, X
 } from 'lucide-react';
 import { useState } from 'react';
@@ -96,6 +96,14 @@ export default function Sidebar() {
                 >
                   <Brain size={18} />
                   <span>AI Insights</span>
+                </NavLink>
+                <NavLink
+                  to="/analytics"
+                  className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <TrendingUp size={18} />
+                  <span>Analytics</span>
                 </NavLink>
               </nav>
             </div>
