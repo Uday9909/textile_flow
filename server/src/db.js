@@ -63,6 +63,19 @@ export function getDb() {
     seedUsers();
   }
 
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS lots (
+      id TEXT PRIMARY KEY,
+      lot_number TEXT UNIQUE NOT NULL,
+      party_name TEXT NOT NULL,
+      quantity REAL NOT NULL,
+      fabric_type TEXT DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'active',
+      created_at TEXT DEFAULT (datetime('now')),
+      dispatched_at TEXT
+    )
+  `);
+
   const partyCount = db.prepare('SELECT COUNT(*) as count FROM parties').get();
   if (partyCount.count === 0) {
     seedParties();
@@ -210,4 +223,38 @@ export function upsertParty(name, phone) {
   dbConn.prepare(
     'INSERT INTO parties (id, name, phone) VALUES (?, ?, ?) ON CONFLICT(name) DO UPDATE SET phone = excluded.phone'
   ).run(id, name, phone);
+}
+
+// ============================================================
+// Lot helpers — inbound WhatsApp lot status queries
+// ============================================================
+
+export function upsertLot(lotNumber, partyName, quantity, fabricType) {
+  const dbConn = getDb();
+  const id = crypto.randomUUID();
+  dbConn.prepare(
+    'INSERT INTO lots (id, lot_number, party_name, quantity, fabric_type) VALUES (?, ?, ?, ?, ?) ON CONFLICT(lot_number) DO UPDATE SET quantity = excluded.quantity, party_name = excluded.party_name, fabric_type = excluded.fabric_type'
+  ).run(id, lotNumber, partyName, quantity, fabricType);
+}
+
+export function markLotDispatched(lotNumber) {
+  const dbConn = getDb();
+  dbConn.prepare("UPDATE lots SET status = 'dispatched', dispatched_at = datetime('now') WHERE lot_number = ?").run(lotNumber);
+}
+
+export function getPartyByPhone(phone) {
+  const dbConn = getDb();
+  return dbConn.prepare('SELECT * FROM parties WHERE phone = ?').get(phone);
+}
+
+export function getTotalLotQuantityByParty(partyName) {
+  const dbConn = getDb();
+  const row = dbConn.prepare("SELECT COALESCE(SUM(quantity), 0) as total FROM lots WHERE party_name = ? AND status = 'active'").get(partyName);
+  return row ? row.total : 0;
+}
+
+export function getActiveLotCountByParty(partyName) {
+  const dbConn = getDb();
+  const row = dbConn.prepare("SELECT COUNT(*) as count FROM lots WHERE party_name = ? AND status = 'active'").get(partyName);
+  return row ? row.count : 0;
 }
