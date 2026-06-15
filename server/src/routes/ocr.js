@@ -9,7 +9,11 @@ import { authenticate } from '../middleware/authenticate.js';
 const router = Router();
 router.use(authenticate);
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+function getGenAI() {
+  const key = process.env.GEMINI_API_KEY || '';
+  if (!key) throw new Error('GEMINI_API_KEY not configured in server/.env');
+  return new GoogleGenerativeAI(key);
+}
 
 const EXTRACTION_PROMPT = `You are a challan/invoice OCR system for a textile factory.
 Extract the following fields from this challan image and return ONLY valid JSON (no markdown, no explanation):
@@ -32,6 +36,7 @@ router.post('/challan', async (req, res) => {
     // Support both base64 data URLs and raw base64
     const base64Data = image.includes('base64,') ? image.split('base64,')[1] : image;
 
+    const genAI = getGenAI();
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const result = await model.generateContent([
