@@ -9,6 +9,7 @@ dotenv.config({ path: 'server/.env' });
 
 import authRouter from './routes/auth.js';
 import notificationsRouter from './routes/notifications.js';
+import { handleWhatsAppWebhook } from './routes/whatsapp-webhook.js';
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -26,6 +27,10 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+
+// Public webhook — no auth required (must come before authenticated notification routes)
+app.post('/api/whatsapp/webhook', handleWhatsAppWebhook);
+
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/whatsapp', notificationsRouter);
 
