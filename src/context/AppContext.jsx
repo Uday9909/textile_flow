@@ -333,6 +333,18 @@ export function AppProvider({ children }) {
     return () => clearTimeout(timer);
   }, [state.undoAction]);
 
+  // Auto-dismiss notifications after 10 seconds
+  useEffect(() => {
+    const undismissed = state.notifications.filter(n => !n.dismissed);
+    if (undismissed.length === 0) return;
+    const timers = undismissed.map(n => {
+      const age = Date.now() - new Date(n.timestamp).getTime();
+      const remaining = Math.max(0, 10000 - age);
+      return setTimeout(() => dispatch({ type: 'DISMISS_NOTIFICATION', payload: { notificationId: n.id } }), remaining);
+    });
+    return () => timers.forEach(t => clearTimeout(t));
+  }, [state.notifications]);
+
   // Helper functions
   const getLotsForDepartment = useCallback((departmentId) => {
     return state.lots.filter(lot => {
