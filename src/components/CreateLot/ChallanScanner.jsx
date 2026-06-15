@@ -1,14 +1,14 @@
 // ============================================================
-// ChallanScanner — OCR document scanner for lot creation
+// ChallanScanner — AI-powered challan OCR scanner
 // ============================================================
-// Uses Tesseract.js for client-side OCR processing.
-// Extracts party name, quantity, and lot number from challan.
+// Sends challan image to backend → Gemini AI → extracts fields
+// Handles both printed and handwritten text.
 // ============================================================
 
 import { useState, useRef } from 'react';
-import { createWorker } from 'tesseract.js';
-import { Scan, Upload, Camera, X, Check, Loader } from 'lucide-react';
+import { Scan, X, Check, Loader } from 'lucide-react';
 import { PARTIES } from '../data/mockData';
+import { api } from '../api';
 
 export default function ChallanScanner({ onScanComplete, onClose }) {
   const [image, setImage] = useState(null);
@@ -27,40 +27,39 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
   const handleScan = async () => {
     if (!image) return;
     setScanning(true);
-    setProgress(0);
+    setProgress(30);
     setExtracted(null);
 
     try {
-      const worker = await createWorker('eng', 1, {
-        logger: (m) => {
-          if (m.status === 'recognizing text') {
-            setProgress(Math.round(m.progress * 100));
-          }
-        },
+      setProgress(60);
+
+      const res = await api('/api/ocr/challan', {
+        method: 'POST',
+        body: JSON.stringify({ image }),
       });
 
-      const { data } = await worker.recognize(image);
-      await worker.terminate();
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'OCR failed' }));
+        throw new Error(err.error || 'OCR request failed');
+      }
 
-      const text = data.text;
-      const lines = text.split('\n').filter(l => l.trim());
+      setProgress(90);
 
-      // Extract fields using simple patterns
-      const rawParty = extractField(lines, ['party', 'name', 'customer', 'm/s', 'm/s.', 'consignee']);
+      const data = await res.json();
 
       // Fuzzy match party name against known parties
-      const matchedParty = rawParty ? findBestMatch(rawParty, PARTIES) : '';
+      const matchedParty = data.partyName ? findBestMatch(data.partyName, PARTIES) : '';
 
       const extractedData = {
-        partyName: matchedParty || rawParty || '',
-        quantity: extractQuantity(lines),
-        lotNumber: extractField(lines, ['lot', 'batch', 'job', 'order no', 'challan no']),
-        colour: extractField(lines, ['colour', 'color', 'shade', 'dye', 'col']),
-        rawText: text,
+        partyName: matchedParty || data.partyName || '',
+        quantity: data.quantity || '',
+        lotNumber: data.lotNumber || '',
+        colour: data.colour || '',
         matched: !!matchedParty,
-        originalRaw: rawParty,
+        originalRaw: data.partyName,
       };
 
+      setProgress(100);
       setExtracted(extractedData);
     } catch (err) {
       console.error('OCR failed:', err);
@@ -182,39 +181,6 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
       </div>
     </div>
   );
-}
-
-// ── Helper: extract field from OCR lines ──
-
-function extractField(lines, keywords) {
-  for (const line of lines) {
-    const lower = line.toLowerCase();
-    for (const kw of keywords) {
-      const idx = lower.indexOf(kw);
-      if (idx !== -1) {
-        const value = line.slice(idx + kw.length).replace(/^[:.\s\-]+/, '').trim();
-        if (value && value.length < 100) return value;
-      }
-    }
-  }
-  return '';
-}
-
-function extractQuantity(lines) {
-  // Look for patterns like "Qty: 500", "Quantity 500 kg", "500 KGS"
-  const qtyPatterns = [
-    /(?:qty|quantity|qnty|weight)\s*[:.\-]?\s*(\d[\d,.]*)/i,
-    /(\d[\d,.]*)\s*(?:kg|kgs|kg\.|meter|mtr|pcs|pieces|meters)/i,
-    /(?:total|net)\s*(?:qty|weight|quantity)\s*[:.\-]?\s*(\d[\d,.]*)/i,
-  ];
-
-  for (const line of lines) {
-    for (const pattern of qtyPatterns) {
-      const match = line.match(pattern);
-      if (match) return match[1].replace(/,/g, '');
-    }
-  }
-  return '';
 }
 
 // ── Helper: fuzzy match against known parties ──
