@@ -10,7 +10,7 @@
 |---|-------|--------|-------|----------|
 | 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
 | 2 | Role Enforcement & Password Reset | ◆ Complete | 3/3 | 100% |
-| 3 | WhatsApp Notifications | ○ Pending | 0/0 | 0% |
+| 3 | WhatsApp Notifications | ● In Progress | 2/2 | 0% |
 | 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
 
 ## Phases
@@ -72,6 +72,12 @@ Plans:
 - WHATS-01: WhatsApp Business API integration configured
 - WHATS-02: Party receives WhatsApp when their lot enters factory (with quantity)
 - WHATS-03: Party receives WhatsApp when their lot is dispatched (with quantity)
+
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Backend: parties table + WhatsApp service + notification API endpoints + config status
+- [ ] 03-02-PLAN.md — Frontend: integrate arrival + dispatch notifications into CreateLot and InProcessCard
 
 ### Phase 4: Inbound WhatsApp & OCR Scanning
 **Goal:** On-demand lot status via WhatsApp and OCR scanning of challan documents
