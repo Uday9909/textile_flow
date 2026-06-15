@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { notifyLotDispatch } from '../../api';
 import { getStageById } from '../../data/mockData';
 import ConfirmModal from '../common/ConfirmModal';
 import { Clock, User, Palette, CheckCircle, AlertTriangle } from 'lucide-react';
@@ -48,10 +49,21 @@ export default function InProcessCard({ lot, department }) {
   }, [startTime]);
 
   const handleComplete = () => {
+    const isLastStage = lot.currentStageIndex >= lot.stages.length - 1;
+
     dispatch({
       type: 'COMPLETE_STAGE',
       payload: { lotId: lot.id, operatorName: state.operatorName },
     });
+
+    if (isLastStage) {
+      notifyLotDispatch({
+        lotNumber: lot.lotNumber,
+        partyName: lot.partyName,
+        quantity: lot.quantity,
+      }).catch(() => {});
+    }
+
     setShowConfirm(false);
   };
 
