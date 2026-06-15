@@ -11,7 +11,7 @@
 | 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
 | 2 | Role Enforcement & Password Reset | ◆ Complete | 3/3 | 100% |
 | 3 | WhatsApp Notifications | ◆ Complete | 2/2 | 100% |
-| 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
+| 4 | Inbound WhatsApp & OCR Scanning | ◐ In Progress | 1/2 | 50% |
 
 ## Phases
 
@@ -92,6 +92,12 @@ Plans:
 - OCR-01: Operator can upload/scan challan document at lot receiving
 - OCR-02: System extracts lot data (quantity, party name) from scanned challan
 
+**Plans:** 2 plans
+
+Plans:
+- [x] 04-01-PLAN.md — Backend: lots table + lot data sync + WhatsApp webhook for inbound queries
+- [ ] 04-02-PLAN.md — Frontend: ChallanScanner component with Tesseract.js OCR + CreateLot integration
+
 ## Dependency Graph
 
 ```
@@ -116,7 +122,7 @@ Phase 1 (Auth Foundation)
 | WHATS-01 | Phase 3 | Pending |
 | WHATS-02 | Phase 3 | Pending |
 | WHATS-03 | Phase 3 | Pending |
-| WHATS-04 | Phase 4 | Pending |
+| WHATS-04 | Phase 4 | Complete |
 | OCR-01 | Phase 4 | Pending |
 | OCR-02 | Phase 4 | Pending |
 
