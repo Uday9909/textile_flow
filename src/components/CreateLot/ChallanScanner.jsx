@@ -49,6 +49,7 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
         partyName: extractField(lines, ['party', 'name', 'customer', 'm/s', 'm/s.', 'consignee']),
         quantity: extractQuantity(lines),
         lotNumber: extractField(lines, ['lot', 'batch', 'job', 'order no', 'challan no']),
+        colour: extractField(lines, ['colour', 'color', 'shade', 'dye', 'col']),
         rawText: text,
       };
 
@@ -67,6 +68,7 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
         partyName: extracted.partyName || '',
         quantity: extracted.quantity || '',
         lotNumber: extracted.lotNumber || '',
+        colour: extracted.colour || '',
       });
     }
   };
@@ -135,6 +137,10 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
                     <div className="extracted-field">
                       <label>Lot Number</label>
                       <span>{extracted.lotNumber || 'Not found'}</span>
+                    </div>
+                    <div className="extracted-field">
+                      <label>Colour</label>
+                      <span>{extracted.colour || 'Not found'}</span>
                     </div>
                   </div>
                   <div className="scanner-actions">

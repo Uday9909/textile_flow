@@ -34,9 +34,10 @@ export default function CreateLot() {
   const [errors, setErrors] = useState({});
 
   const handleScanComplete = (data) => {
-    if (data.partyName) handleChange('partyName', data.partyName);
+    if (data.partyName) handleChange('partyName', data.partyName.trim());
     if (data.quantity) handleChange('quantity', data.quantity);
     if (data.lotNumber) handleChange('lotNumber', data.lotNumber);
+    if (data.colour) handleChange('colour', data.colour.trim());
     setShowScanner(false);
   };
 
@@ -140,14 +141,17 @@ export default function CreateLot() {
             <Building2 size={14} style={{ verticalAlign: 'middle', marginRight: '6px' }} />
             Party Name
           </label>
-          <select
+          <input
             className="form-input"
+            type="text"
+            placeholder="Type or select a party"
             value={formData.partyName}
             onChange={e => handleChange('partyName', e.target.value)}
-          >
-            <option value="">-- Select Party --</option>
-            {PARTIES.map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
+            list="party-suggestions"
+          />
+          <datalist id="party-suggestions">
+            {PARTIES.map(p => <option key={p} value={p} />)}
+          </datalist>
           {errors.partyName && <span style={{ color: 'var(--priority-urgent)', fontSize: 'var(--font-size-sm)' }}>{errors.partyName}</span>}
         </div>
 
