@@ -49,9 +49,23 @@ export function getDb() {
     )
   `);
 
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS parties (
+      id TEXT PRIMARY KEY,
+      name TEXT UNIQUE NOT NULL,
+      phone TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+
   const count = db.prepare('SELECT COUNT(*) as count FROM users').get();
   if (count.count === 0) {
     seedUsers();
+  }
+
+  const partyCount = db.prepare('SELECT COUNT(*) as count FROM parties').get();
+  if (partyCount.count === 0) {
+    seedParties();
   }
 
   return db;
@@ -145,4 +159,55 @@ export function updateUserPassword(userId, newPasswordHash) {
 export function getUserByEmailWithHash(email) {
   const dbConn = getDb();
   return dbConn.prepare('SELECT * FROM users WHERE email = ?').get(email);
+}
+
+// ============================================================
+// Party helpers — WhatsApp notification phone lookups
+// ============================================================
+
+function seedParties() {
+  const parties = [
+    { id: crypto.randomUUID(), name: 'Satya International', phone: '+919000000001' },
+    { id: crypto.randomUUID(), name: 'Rajan Textiles', phone: '+919000000002' },
+    { id: crypto.randomUUID(), name: 'Gupta Fabrics Pvt. Ltd.', phone: '+919000000003' },
+    { id: crypto.randomUUID(), name: 'Sharma & Sons Exports', phone: '+919000000004' },
+    { id: crypto.randomUUID(), name: 'Krishna Mills', phone: '+919000000005' },
+    { id: crypto.randomUUID(), name: 'Naveen Dyeing Works', phone: '+919000000006' },
+  ];
+
+  const insert = db.prepare(
+    'INSERT INTO parties (id, name, phone) VALUES (?, ?, ?)'
+  );
+
+  const insertMany = db.transaction((prts) => {
+    for (const p of prts) {
+      insert.run(p.id, p.name, p.phone);
+    }
+  });
+
+  insertMany(parties);
+  console.log('Seeded 6 parties with phone numbers');
+}
+
+export function getPartyByName(name) {
+  const dbConn = getDb();
+  return dbConn.prepare('SELECT * FROM parties WHERE name = ?').get(name);
+}
+
+export function getPartyById(id) {
+  const dbConn = getDb();
+  return dbConn.prepare('SELECT * FROM parties WHERE id = ?').get(id);
+}
+
+export function getAllParties() {
+  const dbConn = getDb();
+  return dbConn.prepare('SELECT * FROM parties ORDER BY name').all();
+}
+
+export function upsertParty(name, phone) {
+  const dbConn = getDb();
+  const id = crypto.randomUUID();
+  dbConn.prepare(
+    'INSERT INTO parties (id, name, phone) VALUES (?, ?, ?) ON CONFLICT(name) DO UPDATE SET phone = excluded.phone'
+  ).run(id, name, phone);
 }
