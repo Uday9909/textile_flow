@@ -6,7 +6,7 @@
 // ============================================================
 
 import { useState, useRef } from 'react';
-import { Scan, X, Check, Loader } from 'lucide-react';
+import { Scan, Upload, X, Check, Loader } from 'lucide-react';
 import { PARTIES } from '../../data/mockData';
 import { api } from '../../api';
 
