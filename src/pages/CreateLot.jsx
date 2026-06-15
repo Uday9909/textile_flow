@@ -105,6 +105,7 @@ export default function CreateLot() {
       lotNumber: lot.lotNumber,
       partyName: lot.partyName,
       quantity: lot.quantity,
+      fabricType: lot.fabricType,
     }).catch(() => {});
 
     navigate(`/queue/${workflow.stages[0]}`);

@@ -158,10 +158,10 @@ export async function resetPassword(token, password) {
 
 // ── Notification helpers (fire-and-forget) ──
 
-export async function notifyLotArrival({ lotNumber, partyName, quantity }) {
+export async function notifyLotArrival({ lotNumber, partyName, quantity, fabricType }) {
   const res = await api('/api/notifications/lot-arrival', {
     method: 'POST',
-    body: JSON.stringify({ lotNumber, partyName, quantity }),
+    body: JSON.stringify({ lotNumber, partyName, quantity, fabricType }),
   });
   return res.json().catch(() => ({}));
 }
