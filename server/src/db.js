@@ -199,6 +199,7 @@ function seedParties() {
     { id: crypto.randomUUID(), name: 'Krishna Mills', phone: '+919000000005' },
     { id: crypto.randomUUID(), name: 'Naveen Dyeing Works', phone: '+919000000006' },
     { id: crypto.randomUUID(), name: 'Udaybir Singh', phone: '+918427702500' },
+    { id: crypto.randomUUID(), name: 'Keshav Jindal', phone: '+919357520200' },
   ];
 
   const insert = db.prepare(

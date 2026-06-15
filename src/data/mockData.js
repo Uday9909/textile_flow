@@ -118,6 +118,7 @@ export const PARTIES = [
   'Krishna Mills',
   'Naveen Dyeing Works',
   'Udaybir Singh',
+  'Keshav Jindal',
 ];
 
 // Sample lots at various stages
