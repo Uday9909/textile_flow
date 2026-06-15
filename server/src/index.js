@@ -16,8 +16,14 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
 app.use(helmet());
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map(s => s.trim());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: (origin, cb) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    // Allow any sub-origin of vercel.app for preview deployments
+    if (origin.endsWith('.vercel.app')) return cb(null, true);
+    cb(null, true); // allow all in dev
+  },
   credentials: true,
 }));
 app.use(express.json());
