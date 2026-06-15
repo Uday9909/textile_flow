@@ -12,6 +12,8 @@ import UndoToast from './components/common/UndoToast';
 import OperatorPrompt from './components/Layout/OperatorPrompt';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Pages
 import DepartmentQueue from './pages/DepartmentQueue';
@@ -94,6 +96,8 @@ function InternalRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/*" element={<ProtectedRoute><AppContent /></ProtectedRoute>} />
     </Routes>
   );

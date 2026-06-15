@@ -3,6 +3,7 @@
 // ============================================================
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogIn } from 'lucide-react';
 
@@ -66,6 +67,22 @@ export default function LoginPage() {
               </>
             )}
           </button>
+
+          <div style={{
+            textAlign: 'center',
+            marginTop: 'var(--space-4)',
+          }}>
+            <Link
+              to="/forgot-password"
+              style={{
+                color: 'var(--accent-primary)',
+                fontSize: 'var(--font-size-sm)',
+                textDecoration: 'none',
+              }}
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </form>
       </div>
     </div>
