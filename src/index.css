@@ -1565,9 +1565,11 @@ tr:hover td {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
   background: var(--bg-primary);
   padding: var(--space-4);
+  box-sizing: border-box;
 }
 
 .login-card {
