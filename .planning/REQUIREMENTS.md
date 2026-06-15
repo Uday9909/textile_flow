@@ -21,8 +21,8 @@ Requirements for initial milestone. Each maps to roadmap phases.
 ### WhatsApp Notifications
 
 - [ ] **WHATS-01**: WhatsApp Business API integration configured
-- [ ] **WHATS-02**: Party receives WhatsApp when their lot enters factory (with quantity)
-- [ ] **WHATS-03**: Party receives WhatsApp when their lot is dispatched (with quantity)
+- [x] **WHATS-02**: Party receives WhatsApp when their lot enters factory (with quantity)
+- [x] **WHATS-03**: Party receives WhatsApp when their lot is dispatched (with quantity)
 - [ ] **WHATS-04**: Party can text WhatsApp to check current quantity of their product in factory
 
 ### OCR Scanning
