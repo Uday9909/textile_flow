@@ -23,54 +23,49 @@ import ProductionHistory from './pages/ProductionHistory';
 
 function AppContent() {
   const { state } = useApp();
-  const { status } = useAuth();
+  const { user, status } = useAuth();
 
   // Wait for auth to resolve
   if (status === 'loading') return null;
 
-  const isAdmin = !state.department || state.department === 'admin';
-  const userDept = state.department;
+  const authRole = user?.role || 'operator';
 
   // Show operator prompt if no name set
   if (!state.operatorName) {
     return <OperatorPrompt />;
   }
 
-  // Department users: only their queue is accessible
-  if (!isAdmin) {
-    return (
-      <div className="app-layout">
-        <Sidebar />
-        <div className="main-content">
-          <TopBar />
-          <Routes>
-            <Route path="/" element={<Navigate to={`/queue/${userDept}`} replace />} />
-            <Route path="/queue/:department" element={<DepartmentQueue />} />
-            {/* All other routes redirect to department queue */}
-            <Route path="*" element={<Navigate to={`/queue/${userDept}`} replace />} />
-          </Routes>
-        </div>
-        <NotificationOverlay />
-        <UndoToast />
-      </div>
-    );
-  }
+  // ── Role-based routing ──
 
-  // Admin: full access
   return (
     <div className="app-layout">
       <Sidebar />
       <div className="main-content">
         <TopBar />
         <Routes>
-          <Route path="/" element={<Navigate to="/queue/dyeing" replace />} />
+
+          {/* Routes shared by all roles */}
+          <Route path="/" element={<Navigate to={`/queue/${state.department || 'dyeing'}`} replace />} />
           <Route path="/queue/:department" element={<DepartmentQueue />} />
-          <Route path="/create" element={<CreateLot />} />
-          <Route path="/dispatch" element={<Dispatch />} />
-          <Route path="/ai-panel" element={<AIPanel />} />
-          <Route path="/supervisor" element={<SupervisorDashboard />} />
-          <Route path="/history" element={<ProductionHistory />} />
-          <Route path="*" element={<Navigate to="/queue/dyeing" replace />} />
+          <Route path="*" element={<Navigate to={`/queue/${state.department || 'dyeing'}`} replace />} />
+
+          {/* Supervisor + Admin routes */}
+          {(authRole === 'supervisor' || authRole === 'admin') && (
+            <>
+              <Route path="/dispatch" element={<Dispatch />} />
+              <Route path="/supervisor" element={<SupervisorDashboard />} />
+              <Route path="/history" element={<ProductionHistory />} />
+            </>
+          )}
+
+          {/* Admin-only routes */}
+          {authRole === 'admin' && (
+            <>
+              <Route path="/create" element={<CreateLot />} />
+              <Route path="/ai-panel" element={<AIPanel />} />
+            </>
+          )}
+
         </Routes>
       </div>
       <NotificationOverlay />
