@@ -4,6 +4,7 @@
 
 import { NavLink } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { STAGE_POOL } from '../../data/mockData';
 import {
   Plus, LayoutDashboard, Brain, Truck, History,
@@ -16,9 +17,10 @@ const QUEUE_DEPARTMENTS = ['grey', 'batching', 'scouring', 'bleaching', 'dyeing'
 
 export default function Sidebar() {
   const { state, dispatch, getWaitingLots, getInProcessLots, resetData } = useApp();
+  const { user: authUser } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isAdmin = state.department === 'admin';
+  const authRole = authUser?.role || 'operator';
   const userDept = state.department;
 
   // Count lots per department for badges
@@ -68,7 +70,7 @@ export default function Sidebar() {
           <h2>TextileFlow</h2>
         </div>
 
-        {isAdmin ? (
+        {authRole === 'admin' ? (
           /* ── Admin Sidebar ── */
           <>
             {/* Main Nav */}
@@ -146,14 +148,6 @@ export default function Sidebar() {
                 </NavLink>
                 <button
                   className="sidebar-nav-item"
-                  onClick={() => { handleSwitchUser(); setMobileOpen(false); }}
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <LogOut size={16} />
-                  <span>Switch User</span>
-                </button>
-                <button
-                  className="sidebar-nav-item"
                   onClick={() => { resetData(); setMobileOpen(false); }}
                   style={{ color: 'var(--text-tertiary)', fontSize: 'var(--font-size-xs)' }}
                 >
@@ -163,8 +157,88 @@ export default function Sidebar() {
               </nav>
             </div>
           </>
+        ) : authRole === 'supervisor' ? (
+          /* ── Supervisor Sidebar ── */
+          <>
+            {/* Main Nav */}
+            <div className="sidebar-section">
+              <div className="sidebar-section-title">Main</div>
+              <nav className="sidebar-nav">
+                <NavLink
+                  to="/supervisor"
+                  className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <LayoutDashboard size={18} />
+                  <span>Dashboard</span>
+                </NavLink>
+              </nav>
+            </div>
+
+            {/* Department Queues */}
+            <div className="sidebar-section" style={{ flex: 1, overflowY: 'auto' }}>
+              <div className="sidebar-section-title">Department Queues</div>
+              <nav className="sidebar-nav">
+                {activeDepartments.map(deptId => {
+                  const stage = STAGE_POOL.find(s => s.id === deptId);
+                  const count = getDeptCount(deptId);
+                  return (
+                    <NavLink
+                      key={deptId}
+                      to={`/queue/${deptId}`}
+                      className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span className="dept-dot" style={{ background: stage?.accent || 'var(--accent-primary)' }} />
+                      <span>{stage?.name || deptId}</span>
+                      {count > 0 && <span className="badge">{count}</span>}
+                    </NavLink>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Bottom Nav */}
+            <div className="sidebar-section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+              <nav className="sidebar-nav">
+                <NavLink
+                  to="/dispatch"
+                  className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Truck size={18} />
+                  <span>Dispatch</span>
+                </NavLink>
+                <NavLink
+                  to="/history"
+                  className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <History size={18} />
+                  <span>Production History</span>
+                </NavLink>
+              </nav>
+            </div>
+
+            {/* Operator context */}
+            <div className="sidebar-section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+              <div className="sidebar-section-title" style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', padding: '0 var(--space-3)', marginBottom: 'var(--space-2)' }}>
+                Signed in as <strong style={{ color: 'var(--text-secondary)' }}>{state.operatorName}</strong>
+              </div>
+              <nav className="sidebar-nav">
+                <button
+                  className="sidebar-nav-item"
+                  onClick={() => { handleSwitchUser(); setMobileOpen(false); }}
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  <LogOut size={16} />
+                  <span>Switch Department</span>
+                </button>
+              </nav>
+            </div>
+          </>
         ) : (
-          /* ── Department User Sidebar ── */
+          /* ── Operator Sidebar ── */
           <>
             <div className="sidebar-section" style={{ flex: 1 }}>
               <div className="sidebar-section-title">My Department</div>
