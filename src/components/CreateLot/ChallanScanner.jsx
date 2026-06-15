@@ -8,6 +8,7 @@
 import { useState, useRef } from 'react';
 import { createWorker } from 'tesseract.js';
 import { Scan, Upload, Camera, X, Check, Loader } from 'lucide-react';
+import { PARTIES } from '../data/mockData';
 
 export default function ChallanScanner({ onScanComplete, onClose }) {
   const [image, setImage] = useState(null);
@@ -45,12 +46,19 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
       const lines = text.split('\n').filter(l => l.trim());
 
       // Extract fields using simple patterns
+      const rawParty = extractField(lines, ['party', 'name', 'customer', 'm/s', 'm/s.', 'consignee']);
+
+      // Fuzzy match party name against known parties
+      const matchedParty = rawParty ? findBestMatch(rawParty, PARTIES) : '';
+
       const extractedData = {
-        partyName: extractField(lines, ['party', 'name', 'customer', 'm/s', 'm/s.', 'consignee']),
+        partyName: matchedParty || rawParty || '',
         quantity: extractQuantity(lines),
         lotNumber: extractField(lines, ['lot', 'batch', 'job', 'order no', 'challan no']),
         colour: extractField(lines, ['colour', 'color', 'shade', 'dye', 'col']),
         rawText: text,
+        matched: !!matchedParty,
+        originalRaw: rawParty,
       };
 
       setExtracted(extractedData);
@@ -127,7 +135,7 @@ export default function ChallanScanner({ onScanComplete, onClose }) {
                   <h3><Check size={18} /> Extracted Data</h3>
                   <div className="extracted-fields">
                     <div className="extracted-field">
-                      <label>Party Name</label>
+                      <label>Party Name {extracted.matched && <span style={{ fontSize: 10, color: '#10b981', marginLeft: 4 }}>✓ Matched</span>}</label>
                       <span>{extracted.partyName || 'Not found'}</span>
                     </div>
                     <div className="extracted-field">
@@ -207,4 +215,34 @@ function extractQuantity(lines) {
     }
   }
   return '';
+}
+
+// ── Helper: fuzzy match against known parties ──
+function findBestMatch(input, parties) {
+  const clean = input.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+  if (!clean) return '';
+
+  let best = { name: '', score: 0 };
+
+  for (const party of parties) {
+    const pClean = party.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+
+    // Exact match
+    if (pClean === clean) return party;
+
+    // One contains the other
+    if (pClean.includes(clean) || clean.includes(pClean)) {
+      const score = Math.min(clean.length, pClean.length) / Math.max(clean.length, pClean.length);
+      if (score > best.score) best = { name: party, score };
+    }
+
+    // Word overlap
+    const cleanWords = clean.split(/\s+/);
+    const pWords = pClean.split(/\s+/);
+    const common = cleanWords.filter(w => w.length > 1 && pWords.includes(w)).length;
+    const score = common / Math.max(cleanWords.length, pWords.length);
+    if (score > best.score) best = { name: party, score };
+  }
+
+  return best.score >= 0.4 ? best.name : '';
 }
