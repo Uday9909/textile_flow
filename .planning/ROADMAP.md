@@ -9,7 +9,7 @@
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Auth Foundation | ○ Planning | 2/2 | 0% |
-| 2 | Role Enforcement & Password Reset | ○ Pending | 0/0 | 0% |
+| 2 | Role Enforcement & Password Reset | ○ Planned | 3/3 | 0% |
 | 3 | WhatsApp Notifications | ○ Pending | 0/0 | 0% |
 | 4 | Inbound WhatsApp & OCR Scanning | ○ Pending | 0/0 | 0% |
 
@@ -52,6 +52,13 @@ Plans:
 - AUTH-05: User can reset password via email link
 - AUTH-06: System enforces three roles — Operator, Supervisor, Admin
 - AUTH-08: Users can only access pages their role permits
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Backend role middleware (authorize) + password reset API endpoints
+- [ ] 02-02-PLAN.md — Frontend role-based route protection + role-filtered sidebar
+- [ ] 02-03-PLAN.md — Frontend password reset pages (ForgotPassword + ResetPassword)
 
 ### Phase 3: WhatsApp Notifications
 **Goal:** WhatsApp Business API integration with automatic notifications to parties on lot arrival and dispatch
