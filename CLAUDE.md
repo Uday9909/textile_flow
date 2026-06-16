@@ -4,22 +4,99 @@
 
 **TextileFlow MES**
 
-A manufacturing execution system (MES) for textile factory floors — tracks production lots through stages (Grey → Bleaching → Dyeing → Finishing → Dispatch), manages department queues, and provides supervisor oversight. Currently a fully client-side SPA built with React.
+A manufacturing execution system (MES) for textile factory floors — tracks production lots through stages (Grey → Bleaching → Dyeing → Finishing → Dispatch), manages department queues, and provides supervisor oversight.
 
 **Core Value:** Operators can reliably track and move lots through production stages, and supervisors have visibility into factory floor status.
 
-**Before pushing any changes to GitHub:** Run `npm run build` locally first to catch build errors before they reach Vercel. Fix any errors before committing and pushing.
+## Current State (June 2026)
 
-### Constraints
+### What's Built & Deployed
 
-- **Tech Stack**: Express backend must integrate with existing React + Vite frontend
-- **Architecture**: Backend expands to handle auth, WhatsApp integration, and OCR — existing mock data and localStorage state remain unchanged initially
-- **WhatsApp**: Requires WhatsApp Business API setup (Twilio or Meta API) — not yet configured
-- **OCR**: Requires an OCR library or service (Tesseract.js or cloud API) for document scanning
-- **Deployment**: Vercel deployment will need to accommodate the Express backend (serverless functions or separate hosting)
-- **Compatibility**: Auth changes must not break existing lot management functionality
-- **No TypeScript**: Both frontend and backend remain JavaScript for now
-- **No Tests**: No test infrastructure exists yet — adding tests is optional for this phase
+| Feature | Status | Details |
+|---------|--------|---------|
+| Auth (JWT, roles) | ✅ Live | Express + jose, 3 roles (admin/supervisor/operator), per-dept logins |
+| Role-based access | ✅ Live | Route/API protection, Sidebar filtering by role |
+| Password reset | ✅ Live | Forgot/reset flow (console-log in dev) |
+| WhatsApp notifications | ✅ Live | Twilio integration, arrival + dispatch automated messages |
+| WhatsApp inbound query | ✅ Live | Parties text "status" → get lot quantity reply |
+| OCR (Gemini AI) | ✅ Live | Handwritten + printed challan scanning |
+| Analytics dashboard | ✅ Live | Stats cards, charts, recent lots table |
+| 14 per-department logins | ✅ Live | Each department has dedicated operator account |
+| Dead code cleanup | ✅ Done | Removed OperatorPrompt, unused exports, broken CSS vars |
+
+### Deployments
+
+- **Frontend:** Vercel — https://keshav-cpcdrhnmi-udaybirs-projects.vercel.app
+- **Backend:** Render — https://textile-flow.onrender.com
+- **GitHub:** https://github.com/Uday9909/textile_flow
+
+### Default Logins
+
+| Email | Password | Role |
+|-------|----------|------|
+| admin@textileflow.com | password123 | Admin (full access) |
+| supervisor@textileflow.com | password123 | Supervisor |
+| dyeing@textileflow.com | password123 | Dyeing operator |
+| grey@textileflow.com | password123 | Grey operator |
+| *(all departments have their own)* | password123 | Operator |
+
+## Next Steps (Production Migration)
+
+### Priority: Move lot data from client to server
+
+Lots currently live in React Context + localStorage (frontend only). Backend CRUD API (`/api/lots`) is built but frontend still primarily uses local state.
+
+**What needs to happen:**
+1. On app load → fetch lots from `GET /api/lots` (already wired, needs strengthening)
+2. Create/update lot → call `POST/PATCH /api/lots` + update local state
+3. Stage completion, dispatch, etc. → sync to backend
+4. Keep localStorage as offline cache only
+
+### Later: PostgreSQL Migration
+
+When production data grows, migrate from SQLite to PostgreSQL (Render Postgres $7/mo or Supabase) for guaranteed persistence across redeploys. The code should support both (SQLite for dev, PG for prod via `DATABASE_URL` env var).
+
+### Later: WhatsApp Billing
+
+Twilio WhatsApp costs ~₹0.70/message. For ~200 msgs/day = ~$45-50/mo. Gemini OCR (~15k images/mo) costs ~$5/mo on paid tier.
+
+## Architecture
+
+```
+Frontend (React/Vite on Vercel)
+  │
+  ├── /login → AuthContext → POST /api/auth/login → JWT
+  │
+  ├── Authenticated routes (role-gated)
+  │   ├── Operator → department queue only
+  │   ├── Supervisor → dashboard + all queues + dispatch
+  │   └── Admin → everything + analytics + lot creation
+  │
+  ├── Create Lot → local state + POST /api/lots + WhatsApp arrival
+  ├── Stage Complete → local state + WhatsApp dispatch
+  └── Scan Challan → POST /api/ocr/challan → Gemini AI → auto-fill form
+
+Backend (Express/SQLite on Render)
+  ├── /api/auth/* — Login, refresh, logout, password reset
+  ├── /api/lots/* — CRUD for lot data
+  ├── /api/notifications/* — WhatsApp notifications
+  ├── /api/whatsapp/* — Status, webhook
+  └── /api/ocr/* — Gemini-powered OCR
+```
+
+## Key Technical Decisions
+
+- **No TypeScript** — plain JS throughout
+- **No ORM** — raw SQL (SQLite via better-sqlite3)
+- **JWT stored in memory** (not localStorage) — refresh via httpOnly cookie
+- **Vite** for frontend build (v8)
+- **Concurrently** to run frontend + backend together in dev
+
+## Before Pushing
+
+1. Run `npm run build` — catch build errors before they reach Vercel
+2. Fix all errors before committing
+3. Commit and push → Vercel + Render auto-deploy
 
 <!-- GSD:project-end -->
 
