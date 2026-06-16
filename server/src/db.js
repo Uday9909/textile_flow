@@ -70,11 +70,31 @@ export function getDb() {
       party_name TEXT NOT NULL,
       quantity REAL NOT NULL,
       fabric_type TEXT DEFAULT '',
-      status TEXT NOT NULL DEFAULT 'active',
+      colour TEXT DEFAULT '',
+      stages TEXT DEFAULT '[]',
+      current_stage_index INTEGER DEFAULT 0,
+      stage_history TEXT DEFAULT '[]',
+      priority TEXT DEFAULT 'normal',
+      status TEXT NOT NULL DEFAULT 'waiting',
       created_at TEXT DEFAULT (datetime('now')),
       dispatched_at TEXT
     )
   `);
+
+  // Add missing columns for existing databases (idempotent)
+  const existingCols = db.prepare("PRAGMA table_info(lots)").all().map(c => c.name);
+  const colMigrations = {
+    'colour': "ALTER TABLE lots ADD COLUMN colour TEXT DEFAULT ''",
+    'stages': "ALTER TABLE lots ADD COLUMN stages TEXT DEFAULT '[]'",
+    'current_stage_index': "ALTER TABLE lots ADD COLUMN current_stage_index INTEGER DEFAULT 0",
+    'stage_history': "ALTER TABLE lots ADD COLUMN stage_history TEXT DEFAULT '[]'",
+    'priority': "ALTER TABLE lots ADD COLUMN priority TEXT DEFAULT 'normal'",
+  };
+  for (const [col, sql] of Object.entries(colMigrations)) {
+    if (!existingCols.includes(col)) {
+      db.exec(sql);
+    }
+  }
 
   const partyCount = db.prepare('SELECT COUNT(*) as count FROM parties').get();
   if (partyCount.count === 0) {

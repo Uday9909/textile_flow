@@ -122,6 +122,42 @@ export async function refresh() {
   return data;
 }
 
+// ── Lots CRUD ──
+
+export async function fetchLots(params = {}) {
+  const q = new URLSearchParams(params).toString();
+  const res = await api(`/api/lots${q ? '?' + q : ''}`);
+  if (!res.ok) throw new Error('Failed to fetch lots');
+  return res.json();
+}
+
+export async function fetchLot(id) {
+  const res = await api(`/api/lots/${encodeURIComponent(id)}`);
+  if (!res.ok) throw new Error('Lot not found');
+  return res.json();
+}
+
+export async function createLot(lotData) {
+  const res = await api('/api/lots', {
+    method: 'POST',
+    body: JSON.stringify(lotData),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create lot' }));
+    throw new Error(err.error);
+  }
+  return res.json();
+}
+
+export async function updateLot(id, data) {
+  const res = await api(`/api/lots/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update lot');
+  return res.json();
+}
+
 // ── Public endpoints (no auth token needed) ──
 
 export async function forgotPassword(email) {

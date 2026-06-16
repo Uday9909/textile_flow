@@ -11,6 +11,7 @@ import authRouter from './routes/auth.js';
 import notificationsRouter from './routes/notifications.js';
 import { handleWhatsAppWebhook } from './routes/whatsapp-webhook.js';
 import ocrRouter from './routes/ocr.js';
+import lotsRouter from './routes/lots.js';
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -42,6 +43,7 @@ app.post('/api/whatsapp/webhook', handleWhatsAppWebhook);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/whatsapp', notificationsRouter);
 app.use('/api/ocr', ocrRouter);
+app.use('/api/lots', lotsRouter);
 
 app.listen(PORT, () => {
   console.log(`TextileFlow server running on port ${PORT}`);
