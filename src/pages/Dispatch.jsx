@@ -150,7 +150,7 @@ export default function Dispatch() {
                     {isComplete ? <CheckCircle size={14} /> : <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>{idx + 1}</span>}
                   </div>
                   <span style={{ fontWeight: isComplete ? 600 : 400, color: isComplete ? 'var(--text-primary)' : 'var(--text-tertiary)' }}>
-                    stage?.name || stageId}
+                    {stage?.name || stageId}
                   </span>
                   {isComplete && history?.operator && (
                     <span style={{ marginLeft: 'auto', fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>

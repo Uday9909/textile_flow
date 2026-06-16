@@ -154,7 +154,6 @@ export default function SupervisorDashboard() {
               <div className="lot-detail-item">
                 <span className="lot-detail-label">Department</span>
                 <span className="lot-detail-value">
-                  {getStageById(searchResult.stages[searchResult.currentStageIndex])?.icon}{' '}
                   {getStageById(searchResult.stages[searchResult.currentStageIndex])?.name}
                 </span>
               </div>
