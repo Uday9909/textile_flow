@@ -23,7 +23,7 @@ export const STAGE_POOL = [
 export const getStageById = (id) => STAGE_POOL.find(s => s.id === id);
 
 // Default rates per process (₹/kg)
-export const DEFAULT_RATES = {
+const DEFAULT_RATES = {
   grey: 1,
   batching: 2,
   scouring: 4,
@@ -41,7 +41,7 @@ export const DEFAULT_RATES = {
 };
 
 // Party-specific rate overrides
-export const PARTY_RATES = {
+const PARTY_RATES = {
   'Satya International': {
     dyeing: 14,
     finishing: 6,
@@ -125,7 +125,7 @@ export const PARTIES = [
 export const INITIAL_LOTS = [];
 
 // Helper: get rate for a party + process
-export function getRate(partyName, stageId) {
+function getRate(partyName, stageId) {
   const partyOverride = PARTY_RATES[partyName];
   if (partyOverride && partyOverride[stageId] !== undefined) {
     return { rate: partyOverride[stageId], source: 'Contract Rate' };

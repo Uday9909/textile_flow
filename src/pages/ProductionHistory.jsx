@@ -176,7 +176,7 @@ export default function ProductionHistory() {
                     <div className="v-timeline-content">
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                         <span style={{ fontWeight: 700, fontSize: 'var(--font-size-base)' }}>
-                          {stage?.icon} {stage?.name || h.stageId}
+                          {stage?.name || h.stageId}
                         </span>
                         {isComplete && (
                           <span style={{
@@ -232,7 +232,7 @@ export default function ProductionHistory() {
                       <div className="v-timeline-dot pending" />
                       <div className="v-timeline-content" style={{ opacity: 0.4 }}>
                         <span style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)' }}>
-                          {stage?.icon} {stage?.name || stageId}
+                          {stage?.name || stageId}
                         </span>
                         <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', display: 'block', marginTop: '2px' }}>
                           Pending

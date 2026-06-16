@@ -64,6 +64,8 @@
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.15);
+  --border-color: var(--border-default);
+  --accent: var(--accent-primary);
 
   /* Radii */
   --radius-sm: 6px;

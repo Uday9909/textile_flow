@@ -159,7 +159,7 @@ export default function AIPanel() {
                   color: lot.stageInfo?.accent,
                   fontSize: 'var(--font-size-sm)',
                 }}>
-                  {lot.stageInfo?.icon} {lot.stageInfo?.name}
+                  {lot.stageInfo?.name}
                 </span>
                 <span style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)' }}>
                   ({lot.status === 'waiting' ? 'Waiting' : 'In Process'})

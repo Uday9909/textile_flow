@@ -3,7 +3,7 @@
 // ============================================================
 
 import { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
-import { INITIAL_LOTS, WORKFLOW_TEMPLATES, DEPT_CAPACITY, getStageById, generateId } from '../data/mockData';
+import { INITIAL_LOTS, WORKFLOW_TEMPLATES, DEPT_CAPACITY, getStageById } from '../data/mockData';
 
 const AppContext = createContext(null);
 
