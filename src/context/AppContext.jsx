@@ -229,7 +229,7 @@ function appReducer(state, action) {
     }
 
     case 'SYNC_LOTS': {
-      return { ...state, lots: action.payload };
+      return { ...state, lots: action.payload || [] };
     }
 
     case 'ADD_WORKFLOW': {
@@ -387,14 +387,14 @@ export function AppProvider({ children }) {
 
   // Helper functions
   const getLotsForDepartment = useCallback((departmentId) => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       const currentStage = lot.stages[lot.currentStageIndex];
       return currentStage === departmentId && lot.status !== 'complete';
     });
   }, [state.lots]);
 
   const getInProcessLots = useCallback((departmentId) => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       const currentStage = lot.stages[lot.currentStageIndex];
       return currentStage === departmentId && lot.status === 'inprocess';
     });
@@ -421,7 +421,7 @@ export function AppProvider({ children }) {
   const getCompletedTodayLots = useCallback((departmentId) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       return lot.stageHistory.some(h => {
         return h.stageId === departmentId &&
                h.status === 'complete' &&
@@ -440,7 +440,7 @@ export function AppProvider({ children }) {
   }, [state.notifications]);
 
   const getCompletedLots = useCallback(() => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       const lastStage = lot.stages[lot.stages.length - 1];
       const lastHistory = lot.stageHistory.find(h => h.stageId === lastStage);
       return lastHistory?.status === 'complete';
@@ -448,7 +448,7 @@ export function AppProvider({ children }) {
   }, [state.lots]);
 
   const getDispatchableLots = useCallback(() => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       // All stages except dispatch are complete, or lot is at dispatch stage
       const dispatchIndex = lot.stages.indexOf('dispatch');
       if (dispatchIndex === -1) return false;
