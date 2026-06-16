@@ -1,22 +1,22 @@
 import { SignJWT, jwtVerify } from 'jose';
 import crypto from 'crypto';
 
-function getSecret(key, fallback) {
-  const val = process.env[key];
-  if (val) return new TextEncoder().encode(val);
-  if (fallback) {
-    console.warn(`WARN: ${key} not set — using generated dev secret. Set it in production.`);
-    return new TextEncoder().encode(fallback);
-  }
-  throw new Error(`Missing required env var: ${key}`);
-}
+// Dev fallback secrets — generated once at startup, not per-request
+const DEV_ACCESS_SECRET = 'dev-access-secret-min-32-chars!!';
+const DEV_REFRESH_SECRET = 'dev-refresh-secret-min-32-chars!!';
 
 function getAccessSecret() {
-  return getSecret('JWT_ACCESS_SECRET', 'dev-secret-' + crypto.randomUUID());
+  const val = process.env.JWT_ACCESS_SECRET;
+  if (val) return new TextEncoder().encode(val);
+  console.warn('WARN: JWT_ACCESS_SECRET not set — using dev fallback. Set it in production.');
+  return new TextEncoder().encode(DEV_ACCESS_SECRET);
 }
 
 function getRefreshSecret() {
-  return getSecret('JWT_REFRESH_SECRET', 'dev-secret-' + crypto.randomUUID());
+  const val = process.env.JWT_REFRESH_SECRET;
+  if (val) return new TextEncoder().encode(val);
+  console.warn('WARN: JWT_REFRESH_SECRET not set — using dev fallback. Set it in production.');
+  return new TextEncoder().encode(DEV_REFRESH_SECRET);
 }
 
 export async function createAccessToken(user) {
