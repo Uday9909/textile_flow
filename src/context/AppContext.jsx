@@ -462,8 +462,10 @@ export function AppProvider({ children }) {
     window.location.reload();
   }, []);
 
+  // Ensure lots is always an array — prevents filter/find crashes downstream
+  const safeState = { ...state, lots: state.lots || [] };
   const value = {
-    state,
+    state: safeState,
     dispatch,
     getLotsForDepartment,
     getInProcessLots,
