@@ -20,10 +20,12 @@ app.use(helmet());
 const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map(s => s.trim());
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-    // Allow any sub-origin of vercel.app for preview deployments
+    // Allow requests with no origin (server-to-server, curl)
+    if (!origin) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    // Allow Vercel preview deployments
     if (origin.endsWith('.vercel.app')) return cb(null, true);
-    cb(null, true); // allow all in dev
+    cb(new Error(`Origin ${origin} not allowed by CORS`));
   },
   credentials: true,
 }));
