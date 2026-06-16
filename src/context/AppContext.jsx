@@ -4,7 +4,7 @@
 
 import { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
 import { INITIAL_LOTS, WORKFLOW_TEMPLATES, DEPT_CAPACITY, getStageById } from '../data/mockData';
-import { fetchLots } from '../api';
+import { fetchLots, updateLot } from '../api';
 
 const AppContext = createContext(null);
 
@@ -27,10 +27,9 @@ function loadState() {
 
 function getInitialState() {
   const saved = loadState();
-  if (saved) return saved;
-
+  // Use cached state as fallback, but expect API to overwrite lots
   return {
-    lots: INITIAL_LOTS,
+    lots: saved?.lots || INITIAL_LOTS,
     workflows: WORKFLOW_TEMPLATES,
     notifications: [],
     operatorName: localStorage.getItem('textileflow_operator') || '',
@@ -284,18 +283,41 @@ export function AppProvider({ children }) {
     };
   }, []);
 
-  // Sync lots from backend on mount (falls back to local state if API fails)
+  // Sync lots from backend — primary source of truth
   useEffect(() => {
     fetchLots({ limit: 500 })
       .then(data => {
-        if (data?.lots?.length) {
+        if (data?.lots) {
           dispatch({ type: 'SYNC_LOTS', payload: data.lots });
         }
       })
       .catch(() => {
-        // API not available — keep local state (dev mode)
+        // API unavailable — keep local state as offline fallback
+        console.warn('Backend unavailable — using local lot data');
       });
   }, []);
+
+  // Sync lot changes to backend (debounced, skips first render)
+  const isFirstRender = useRef(true);
+  const syncTimerRef = useRef(null);
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = setTimeout(async () => {
+      for (const lot of state.lots) {
+        try {
+          await updateLot(lot.id || lot.lotNumber, {
+            currentStageIndex: lot.currentStageIndex,
+            status: lot.status,
+            stageHistory: lot.stageHistory,
+          });
+        } catch {
+          // Local state is preserved — API sync is best-effort
+        }
+      }
+    }, 2000);
+    return () => { if (syncTimerRef.current) clearTimeout(syncTimerRef.current); };
+  }, [state.lots]);
 
   // Persist state and broadcast on every change
   useEffect(() => {

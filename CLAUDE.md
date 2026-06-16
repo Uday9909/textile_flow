@@ -44,7 +44,7 @@ A manufacturing execution system (MES) for textile factory floors — tracks pro
 
 ### Priority: Move lot data from client to server
 
-Lots currently live in React Context + localStorage (frontend only). Backend CRUD API (`/api/lots`) is built but frontend still primarily uses local state.
+Backend is the source of truth for lot data. Frontend fetches from `GET /api/lots` on mount and syncs all changes (create, stage progression, status) back to the API via debounced PATCH requests. localStorage is used as an offline cache/fallback only.
 
 **What needs to happen:**
 1. On app load → fetch lots from `GET /api/lots` (already wired, needs strengthening)
