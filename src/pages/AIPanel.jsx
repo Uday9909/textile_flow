@@ -52,7 +52,7 @@ export default function AIPanel() {
   // Department performance data
   const deptPerformance = useMemo(() => {
     const deptStats = {};
-    state.lots.forEach(lot => {
+    (state.lots || []).forEach(lot => {
       lot.stageHistory.forEach(h => {
         if (h.status === 'complete' && h.startTime && h.endTime) {
           const stage = getStageById(h.stageId);

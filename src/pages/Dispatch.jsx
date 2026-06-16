@@ -18,13 +18,13 @@ export default function Dispatch() {
 
   // Get lots ready for dispatch
   const dispatchableLots = useMemo(() => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       const completedStages = lot.stageHistory.filter(h => h.status === 'complete').length;
       return completedStages >= lot.stages.length - 1 || lot.status === 'complete';
     });
   }, [state.lots]);
 
-  const selectedLot = state.lots.find(l => l.id === selectedLotId);
+  const selectedLot = (state.lots || []).find(l => l.id === selectedLotId);
   const charges = selectedLot ? calculateCharges(selectedLot) : null;
 
   return (
@@ -78,7 +78,7 @@ export default function Dispatch() {
           <div style={{ marginTop: 'var(--space-8)' }}>
             <h3 style={{ marginBottom: 'var(--space-4)', color: 'var(--text-secondary)' }}>All Lots (Demo View)</h3>
             <div className="queue-cards">
-              {state.lots.map(lot => {
+              {(state.lots || []).map(lot => {
                 const completedCount = lot.stageHistory.filter(h => h.status === 'complete').length;
                 return (
                   <div

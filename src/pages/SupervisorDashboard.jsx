@@ -38,7 +38,7 @@ export default function SupervisorDashboard() {
 
   // Today's dispatchable lots
   const dispatchable = useMemo(() => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       const completedCount = lot.stageHistory.filter(h => h.status === 'complete').length;
       return completedCount >= lot.stages.length;
     });
@@ -47,7 +47,7 @@ export default function SupervisorDashboard() {
   // Revenue calculation
   const revenue = useMemo(() => {
     let total = 0;
-    state.lots.forEach(lot => {
+    (state.lots || []).forEach(lot => {
       const completedStages = lot.stageHistory.filter(h => h.status === 'complete');
       if (completedStages.length > 0) {
         const { total: lotTotal } = calculateCharges(lot);
@@ -61,7 +61,7 @@ export default function SupervisorDashboard() {
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
     const query = searchQuery.trim().toLowerCase();
-    const lot = state.lots.find(l =>
+    const lot = (state.lots || []).find(l =>
       l.lotNumber.toLowerCase().includes(query) ||
       l.partyName.toLowerCase().includes(query)
     );
@@ -70,7 +70,7 @@ export default function SupervisorDashboard() {
 
   // Delays count
   const totalDelays = useMemo(() => {
-    return state.lots.filter(lot => {
+    return (state.lots || []).filter(lot => {
       if (lot.status === 'complete') return false;
       const currentStage = lot.stages[lot.currentStageIndex];
       const stageInfo = getStageById(currentStage);
@@ -97,7 +97,7 @@ export default function SupervisorDashboard() {
       <div className="grid-4" style={{ marginBottom: 'var(--space-8)' }}>
         <div className="stat-card">
           <span className="stat-card-label">Active Lots</span>
-          <span className="stat-card-value">{state.lots.filter(l => l.status !== 'complete').length}</span>
+          <span className="stat-card-value">{(state.lots || []).filter(l => l.status !== 'complete').length}</span>
         </div>
         <div className="stat-card">
           <span className="stat-card-label">Revenue (Est.)</span>

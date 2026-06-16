@@ -35,14 +35,14 @@ export default function ProductionHistory() {
   const filteredLots = useMemo(() => {
     if (!searchQuery.trim()) return state.lots;
     const query = searchQuery.toLowerCase();
-    return state.lots.filter(l =>
+    return (state.lots || []).filter(l =>
       l.lotNumber.toLowerCase().includes(query) ||
       l.partyName.toLowerCase().includes(query) ||
       l.colour.toLowerCase().includes(query)
     );
   }, [state.lots, searchQuery]);
 
-  const selectedLot = state.lots.find(l => l.id === selectedLotId);
+  const selectedLot = (state.lots || []).find(l => l.id === selectedLotId);
 
   // Export CSV
   const exportCSV = () => {

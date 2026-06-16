@@ -32,7 +32,7 @@ export default function UndoToast() {
     });
   };
 
-  const lot = state.lots.find(l => l.id === undoAction.payload.lotId) || undoAction.payload.previousLot;
+  const lot = (state.lots || []).find(l => l.id === undoAction.payload.lotId) || undoAction.payload.previousLot;
 
   return (
     <div className="undo-toast">
