@@ -229,7 +229,23 @@ function appReducer(state, action) {
     }
 
     case 'SYNC_LOTS': {
-      return { ...state, lots: action.payload || [] };
+      // Convert snake_case API response to camelCase used by frontend
+      const normalize = (lot) => ({
+        id: lot.id,
+        lotNumber: lot.lot_number || lot.lotNumber,
+        partyName: lot.party_name || lot.partyName,
+        quantity: lot.quantity,
+        fabricType: lot.fabric_type || lot.fabricType,
+        colour: lot.colour,
+        stages: typeof lot.stages === 'string' ? JSON.parse(lot.stages) : (lot.stages || []),
+        currentStageIndex: lot.current_stage_index ?? lot.currentStageIndex ?? 0,
+        status: lot.status,
+        stageHistory: typeof lot.stage_history === 'string' ? JSON.parse(lot.stage_history) : (lot.stageHistory || []),
+        priority: lot.priority || 'normal',
+        createdAt: lot.created_at || lot.createdAt,
+        ...lot, // spread any extra fields
+      });
+      return { ...state, lots: (action.payload || []).map(normalize) };
     }
 
     case 'ADD_WORKFLOW': {
