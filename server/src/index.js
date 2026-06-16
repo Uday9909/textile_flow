@@ -4,6 +4,8 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
+import { getDb } from './db.js';
 
 dotenv.config({ path: '.env' });
 
@@ -33,8 +35,43 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Rate Limiting — only on auth-sensitive routes, not all API
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts. Try again in 15 minutes.' },
+});
+
+const ocrLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 20, // limit each IP to 20 OCR requests per hour
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many document scans. Please try again in an hour.' },
+});
+
+// Apply rate limiting
+app.use('/api/ocr', ocrLimiter);
+
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  try {
+    const db = getDb();
+    db.prepare('SELECT 1').get();
+    res.json({
+      status: 'ok',
+      database: 'connected',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      database: 'disconnected',
+      error: err.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 app.use('/api/auth', authRouter);
