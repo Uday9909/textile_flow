@@ -4,6 +4,7 @@
 
 import { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
 import { INITIAL_LOTS, WORKFLOW_TEMPLATES, DEPT_CAPACITY, getStageById } from '../data/mockData';
+import { fetchLots } from '../api';
 
 const AppContext = createContext(null);
 
@@ -228,6 +229,10 @@ function appReducer(state, action) {
       return { ...state, operatorName: '', department: '' };
     }
 
+    case 'SYNC_LOTS': {
+      return { ...state, lots: action.payload };
+    }
+
     case 'ADD_WORKFLOW': {
       return {
         ...state,
@@ -277,6 +282,19 @@ export function AppProvider({ children }) {
         channelRef.current.close();
       }
     };
+  }, []);
+
+  // Sync lots from backend on mount (falls back to local state if API fails)
+  useEffect(() => {
+    fetchLots({ limit: 500 })
+      .then(data => {
+        if (data?.lots?.length) {
+          dispatch({ type: 'SYNC_LOTS', payload: data.lots });
+        }
+      })
+      .catch(() => {
+        // API not available — keep local state (dev mode)
+      });
   }, []);
 
   // Persist state and broadcast on every change

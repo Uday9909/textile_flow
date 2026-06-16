@@ -11,7 +11,7 @@ import {
 } from '../data/mockData';
 import CustomWorkflowBuilder from '../components/CreateLot/CustomWorkflowBuilder';
 import ChallanScanner from '../components/CreateLot/ChallanScanner';
-import { notifyLotArrival } from '../api';
+import { notifyLotArrival, createLot as apiCreateLot } from '../api';
 import { Plus, Package, ArrowRight, Layers, Palette, Weight, Building2, Scan } from 'lucide-react';
 
 export default function CreateLot() {
@@ -99,6 +99,17 @@ export default function CreateLot() {
     };
 
     dispatch({ type: 'CREATE_LOT', payload: { lot } });
+
+    // Sync to backend (fire-and-forget)
+    apiCreateLot({
+      lotNumber: lot.lotNumber,
+      partyName: lot.partyName,
+      quantity: lot.quantity,
+      fabricType: lot.fabricType,
+      colour: lot.colour,
+      stages: lot.stages,
+      priority: lot.priority,
+    }).catch(() => {});
 
     // Fire-and-forget WhatsApp arrival notification
     notifyLotArrival({
