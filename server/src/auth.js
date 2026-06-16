@@ -1,18 +1,22 @@
 import { SignJWT, jwtVerify } from 'jose';
 import crypto from 'crypto';
 
-function requireEnv(key) {
+function getSecret(key, fallback) {
   const val = process.env[key];
-  if (!val) throw new Error(`Missing required env var: ${key}. Set it in server/.env or Render dashboard.`);
-  return val;
+  if (val) return new TextEncoder().encode(val);
+  if (fallback) {
+    console.warn(`WARN: ${key} not set — using generated dev secret. Set it in production.`);
+    return new TextEncoder().encode(fallback);
+  }
+  throw new Error(`Missing required env var: ${key}`);
 }
 
 function getAccessSecret() {
-  return new TextEncoder().encode(requireEnv('JWT_ACCESS_SECRET'));
+  return getSecret('JWT_ACCESS_SECRET', 'dev-secret-' + crypto.randomUUID());
 }
 
 function getRefreshSecret() {
-  return new TextEncoder().encode(requireEnv('JWT_REFRESH_SECRET'));
+  return getSecret('JWT_REFRESH_SECRET', 'dev-secret-' + crypto.randomUUID());
 }
 
 export async function createAccessToken(user) {
