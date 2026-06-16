@@ -78,7 +78,7 @@ function appReducer(state, action) {
       };
       return {
         ...state,
-        lots: [...state.lots, lot],
+        lots: [...(state.lots || []), lot],
         notifications: [newNotification, ...state.notifications],
       };
     }
